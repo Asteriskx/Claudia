@@ -1,9 +1,14 @@
 ﻿using Newtonsoft.Json;
 
-namespace Claudia.SoundCloud
+namespace Claudia.SoundCloud.EndPoints
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class User
 	{
+		#region Properties
+
 		[JsonProperty("id")]
 		public int Id { get; set; }
 
@@ -27,5 +32,7 @@ namespace Claudia.SoundCloud
 
 		[JsonProperty("avatar_url")]
 		public string AvatarUrl { get; set; }
+
+		#endregion Properties
 	}
 }

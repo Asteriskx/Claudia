@@ -1,4 +1,4 @@
-﻿namespace Claudia.SoundCloud.Urls
+﻿namespace Claudia.SoundCloud.EndPoints.Urls
 {
 	/// <summary>
 	/// SoundCloud の エンドポイント一覧

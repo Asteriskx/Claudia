@@ -100,6 +100,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SoundCloud\Helper\CliendIdRequestHandler.cs" />
     <Compile Include="SoundCloud\Helper\CookieVisitor.cs" />
     <Compile Include="LoginForm.cs">
       <SubType>Form</SubType>
@@ -109,9 +110,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundCloud\SCFavorite.cs" />
-    <Compile Include="SoundCloud\Urls\EndPoints.cs" />
-    <Compile Include="SoundCloud\User.cs" />
+    <Compile Include="SoundCloud\EndPoints\Users\SCFavorite.cs" />
+    <Compile Include="SoundCloud\EndPoints\Urls\EndPoints.cs" />
+    <Compile Include="SoundCloud\EndPoints\Users\User.cs" />
     <Compile Include="Utility\ColumnHeaderEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -143,6 +144,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="SoundCloud\EndPoints\Apps\" />
+    <Folder Include="SoundCloud\EndPoints\Comments\" />
+    <Folder Include="SoundCloud\EndPoints\Connect\" />
+    <Folder Include="SoundCloud\EndPoints\Me\Activities\" />
+    <Folder Include="SoundCloud\EndPoints\Me\Connections\" />
+    <Folder Include="SoundCloud\EndPoints\OAuth2\Token\" />
+    <Folder Include="SoundCloud\EndPoints\Oembed\" />
+    <Folder Include="SoundCloud\EndPoints\PlayLists\" />
+    <Folder Include="SoundCloud\EndPoints\Resolve\" />
+    <Folder Include="SoundCloud\EndPoints\Tracks\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

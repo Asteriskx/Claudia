@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using Claudia.SoundCloud;
-using Claudia.SoundCloud.Urls;
+﻿using Claudia.SoundCloud.EndPoints;
+using Claudia.SoundCloud.EndPoints.Urls;
 using Claudia.Utility;
+using Newtonsoft.Json;
 
 using System;
 using System.Collections.Generic;
@@ -12,29 +11,72 @@ using System.Windows.Forms;
 
 namespace Claudia
 {
+	/// <summary>
+	/// Claudia - MainForm
+	/// </summary>
 	public partial class MainForm : Form
 	{
-		private string ClientId { get; set; } = string.Empty;
-		private string Token { get; set; } = string.Empty;
+		#region Properties
+
+		/// <summary>
+		/// 
+		/// </summary>
 		private HttpClient Client { get; set; } = new HttpClient();
+
+		/// <summary>
+		/// 
+		/// </summary>
 		private List<SCFavorite> Favorite { get; set; } = new List<SCFavorite>();
 
-		public MainForm()
-		{
-			this.InitializeComponent();
-		}
+		/// <summary>
+		/// 
+		/// </summary>
+		private string ClientId { get; set; } = string.Empty;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private string Token { get; set; } = string.Empty;
+
+		#endregion Properties
+
+		#region Constructor
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public MainForm() => this.InitializeComponent();
+
+		#endregion Constructor
+
+		#region Event Methods
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			this._InitializeResultView();
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private async void AccessButton_Click(object sender, EventArgs e)
 		{
 			await this.GetTracks();
 			this.pictureBox1.ImageLocation = this.Favorite[0].ArtworkUrl ?? string.Empty;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void loginButton_Click(object sender, EventArgs e)
 		{
 			if (string.IsNullOrEmpty(this.Token))
@@ -55,6 +97,14 @@ namespace Claudia
 				Console.WriteLine("既にトークン取得完了しています。");
 			}
 		}
+
+		#endregion Event Methods
+
+		#region Public Methods
+
+		#endregion Public Methods
+
+		#region Private Methods
 
 		/// <summary>
 		/// 取得リストビューの初期設定を行います。
@@ -96,6 +146,10 @@ namespace Claudia
 			//}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		private async Task GetTracks()
 		{
 			var t = this.Token.Split('-');
@@ -118,5 +172,7 @@ namespace Claudia
 			//	this.ArtworkUrl = f.ArtworkUrl;
 			//}
 		}
+
+		#endregion Private Methods
 	}
 }

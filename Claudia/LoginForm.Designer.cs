@@ -46,7 +46,7 @@
 			this.ClientSize = new System.Drawing.Size(1006, 518);
 			this.Controls.Add(this.panel1);
 			this.Name = "LoginForm";
-			this.Text = "Form1";
+			this.Text = "Login - SoundCloud";
 			this.Load += new System.EventHandler(this.LoginForm_Load);
 			this.ResumeLayout(false);
 
