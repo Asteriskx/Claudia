@@ -1,5 +1,5 @@
 ﻿using Claudia.SoundCloud.EndPoints;
-using Claudia.SoundCloud.EndPoints.Urls;
+using Claudia.SoundCloud.EndPoints.Users;
 using Claudia.Utility;
 using Newtonsoft.Json;
 
@@ -21,22 +21,27 @@ namespace Claudia
 		/// <summary>
 		/// 
 		/// </summary>
-		private HttpClient Client { get; set; } = new HttpClient();
+		private HttpClient _Client { get; set; } = new HttpClient();
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<SCFavorite> Favorite { get; set; } = new List<SCFavorite>();
+		private List<SCFavoriteObjects> _Favorite { get; set; } = new List<SCFavoriteObjects>();
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private string ClientId { get; set; } = string.Empty;
+		private SCUsers _SCUsers { get; set; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private string Token { get; set; } = string.Empty;
+		private string _ClientId { get; set; } = string.Empty;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private string _Token { get; set; } = string.Empty;
 
 		#endregion Properties
 
@@ -68,8 +73,8 @@ namespace Claudia
 		/// <param name="e"></param>
 		private async void AccessButton_Click(object sender, EventArgs e)
 		{
-			await this.GetTracks();
-			this.pictureBox1.ImageLocation = this.Favorite[0].ArtworkUrl ?? string.Empty;
+			await this.GetFavoriteSongsListAsync();
+			this.pictureBox1.ImageLocation = this._Favorite[0].ArtworkUrl ?? string.Empty;
 		}
 
 		/// <summary>
@@ -79,13 +84,13 @@ namespace Claudia
 		/// <param name="e"></param>
 		private void loginButton_Click(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(this.Token))
+			if (string.IsNullOrEmpty(this._Token))
 			{
 				var form = new LoginForm();
 				if (form.ShowDialog() == DialogResult.OK)
 				{
-					this.ClientId = form.ClientId;
-					this.Token = form.Token;
+					this._ClientId = form.ClientId;
+					this._Token = form.Token;
 					this.loginInfo.Text = "ログイン完了";
 					this.tokenInfo.Text = "トークン取得完了";
 				}
@@ -96,6 +101,8 @@ namespace Claudia
 				this.tokenInfo.Text = "トークン取得済み。";
 				Console.WriteLine("既にトークン取得完了しています。");
 			}
+
+			this._SCUsers = new SCUsers(this._Token, HttpMethod.Get);
 		}
 
 		#endregion Event Methods
@@ -150,27 +157,15 @@ namespace Claudia
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		private async Task GetTracks()
+		private async Task GetFavoriteSongsListAsync()
 		{
-			var t = this.Token.Split('-');
-			var userId = t[2];
-			var req = new HttpRequestMessage(HttpMethod.Get, $"{EndPoints.Users}{userId}/favorites");
-			req.Headers.Add("Authorization", $"OAuth {this.Token}");
+			var connection = await this._SCUsers.GetRequestMessageAsync();
 
-			var response = await this.Client.SendAsync(req);
+			var response = await this._Client.SendAsync(connection);
+
 			var resString = await response.Content.ReadAsStringAsync();
 
-			this.Favorite = JsonConvert.DeserializeObject<List<SCFavorite>>(resString);
-
-			//foreach (var f in fav)
-			//{
-			//	Console.WriteLine(f.Title);
-			//	Console.WriteLine(f.Uri);
-			//	Console.WriteLine(f.ArtworkUrl);
-			//	Console.WriteLine(f.Genre);
-			//	Console.WriteLine(f.LikesCount);
-			//	this.ArtworkUrl = f.ArtworkUrl;
-			//}
+			this._Favorite = JsonConvert.DeserializeObject<List<SCFavoriteObjects>>(resString);
 		}
 
 		#endregion Private Methods

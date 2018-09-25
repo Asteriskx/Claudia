@@ -10,8 +10,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{66410F5D-5C1E-43B1-8CA7-25F1FC0DCBED}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>SoundCloudAPITest</RootNamespace>
-    <AssemblyName>SoundCloudAPITest</AssemblyName>
+    <RootNamespace>Claudia</RootNamespace>
+    <AssemblyName>Claudia</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -77,6 +77,9 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Claudia.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -100,6 +103,7 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SoundCloud\EndPoints\Users\SCUsers.cs" />
     <Compile Include="SoundCloud\Helper\CliendIdRequestHandler.cs" />
     <Compile Include="SoundCloud\Helper\CookieVisitor.cs" />
     <Compile Include="LoginForm.cs">
@@ -110,9 +114,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SoundCloud\EndPoints\Users\SCFavorite.cs" />
-    <Compile Include="SoundCloud\EndPoints\Urls\EndPoints.cs" />
-    <Compile Include="SoundCloud\EndPoints\Users\User.cs" />
+    <Compile Include="SoundCloud\EndPoints\Users\SCFavoriteObjects.cs" />
+    <Compile Include="SoundCloud\EndPoints\EndPoints.cs" />
+    <Compile Include="SoundCloud\Helper\ProvideRequest.cs" />
     <Compile Include="Utility\ColumnHeaderEx.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -130,6 +134,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
