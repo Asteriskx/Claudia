@@ -1,6 +1,5 @@
 ﻿using Claudia.SoundCloud.Helper;
 using System.Net.Http;
-using System.Threading.Tasks;
 
 namespace Claudia.SoundCloud.EndPoints.Users
 {

@@ -30,7 +30,7 @@ namespace Claudia.SoundCloud.EndPoints
 		[JsonProperty("state")]
 		public string State { get; set; }
 
-		[JsonProperty("kioriginal_content_sizend")]
+		[JsonProperty("original_content_sizend")]
 		public int OriginalContentSize { get; set; }
 
 		[JsonProperty("last_modified")]
