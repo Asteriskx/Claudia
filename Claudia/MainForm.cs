@@ -159,11 +159,12 @@ namespace Claudia
 		/// <returns></returns>
 		private async Task GetFavoriteSongsListAsync()
 		{
-			var connection = await this._SCUsers.GetRequestMessageAsync();
+			var connection = this._SCUsers.GetRequestMessage();
 
 			var response = await this._Client.SendAsync(connection);
 
 			var resString = await response.Content.ReadAsStringAsync();
+			resString = resString.Replace("large", "t500x500");
 
 			this._Favorite = JsonConvert.DeserializeObject<List<SCFavoriteObjects>>(resString);
 		}

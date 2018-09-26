@@ -1,5 +1,6 @@
-﻿using System.Net.Http;
-using System.Threading.Tasks;
+﻿using Claudia.Exceptions;
+using System;
+using System.Net.Http;
 
 namespace Claudia.SoundCloud.Helper
 {
@@ -17,18 +18,23 @@ namespace Claudia.SoundCloud.Helper
 		/// <param name="type"></param>
 		/// <param name="endPoint"></param>
 		/// <returns></returns>
-		public static Task<HttpRequestMessage> CreateRequest(string token, HttpMethod type, string endPoint)
+		public static HttpRequestMessage CreateRequest(string token, HttpMethod type, string endPoint)
 		{
-			return new Task<HttpRequestMessage>(() =>
-			{
-				var req = default(HttpRequestMessage);
+			var req = default(HttpRequestMessage);
 
+			try
+			{
 				if (!string.IsNullOrEmpty(endPoint))
 					req = new HttpRequestMessage(type, _BaseUrl + endPoint);
 
 				req.Headers.Add("Authorization", $"OAuth {token}");
-				return req;
-			});
+			}
+			catch (Exception ex)
+			{
+				throw new ClaudiaException($"{ex.Message} - {ex.StackTrace}");
+			}
+
+			return req;
 		}
 	}
 }

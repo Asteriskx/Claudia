@@ -50,9 +50,9 @@ namespace Claudia.SoundCloud.EndPoints.Users
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task<HttpRequestMessage> GetRequestMessageAsync()
+		public HttpRequestMessage GetRequestMessage()
 		{
-			return await ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.Favorites);
+			return ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.Favorites);
 		}
 
 		#endregion Private Method

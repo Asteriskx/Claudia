@@ -122,6 +122,7 @@
 			this.pictureBox1.Location = new System.Drawing.Point(27, 18);
 			this.pictureBox1.Name = "pictureBox1";
 			this.pictureBox1.Size = new System.Drawing.Size(300, 300);
+			this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.pictureBox1.TabIndex = 1;
 			this.pictureBox1.TabStop = false;
 			// 
@@ -143,7 +144,7 @@
 			// 
 			this.ResultView.Location = new System.Drawing.Point(27, 324);
 			this.ResultView.Name = "ResultView";
-			this.ResultView.Size = new System.Drawing.Size(644, 159);
+			this.ResultView.Size = new System.Drawing.Size(675, 159);
 			this.ResultView.TabIndex = 9;
 			this.ResultView.UseCompatibleStateImageBehavior = false;
 			// 
