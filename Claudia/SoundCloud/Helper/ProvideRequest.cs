@@ -18,14 +18,14 @@ namespace Claudia.SoundCloud.Helper
 		/// <param name="type"></param>
 		/// <param name="endPoint"></param>
 		/// <returns></returns>
-		public static HttpRequestMessage CreateRequest(string token, HttpMethod type, string endPoint)
+		public static HttpRequestMessage CreateRequest(string token, HttpMethod type, string endPoint, string clientId, string query)
 		{
 			var req = default(HttpRequestMessage);
 
 			try
 			{
 				if (!string.IsNullOrEmpty(endPoint))
-					req = new HttpRequestMessage(type, _BaseUrl + endPoint);
+					req = new HttpRequestMessage(type, $"{_BaseUrl}{endPoint}?client_id={clientId}&{query}");
 
 				req.Headers.Add("Authorization", $"OAuth {token}");
 			}

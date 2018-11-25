@@ -15,6 +15,7 @@ namespace Claudia.SoundCloud.EndPoints.Users
 		/// </summary>
 		private string _Token { get; set; } = string.Empty;
 
+		private string _ClientId { get; set; } = string.Empty;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -34,9 +35,10 @@ namespace Claudia.SoundCloud.EndPoints.Users
 		/// </summary>
 		/// <param name="token"></param>
 		/// <param name="type"></param>
-		public SCUsers(string token, HttpMethod type)
+		public SCUsers(string token, string clientId, HttpMethod type)
 		{
 			this._Token = token;
+			this._ClientId = clientId;
 			this._Type = type;
 			this._Users = new EndPoints.Users(this._Token.Split('-')[2]);
 		}
@@ -51,7 +53,7 @@ namespace Claudia.SoundCloud.EndPoints.Users
 		/// <returns></returns>
 		public HttpRequestMessage GetRequestMessage()
 		{
-			return ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.Favorites);
+			return ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.Favorites, this._ClientId, "limit=200&linked_partitioning=1");
 		}
 
 		#endregion Private Method
