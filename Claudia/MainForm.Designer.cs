@@ -243,12 +243,12 @@
 			// 
 			this.toolStripStatusLabel1.ForeColor = System.Drawing.Color.White;
 			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-			this.toolStripStatusLabel1.Size = new System.Drawing.Size(118, 17);
-			this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(39, 17);
+			this.toolStripStatusLabel1.Text = "Ready";
 			// 
 			// panel1
 			// 
-			this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+			this.panel1.BackColor = System.Drawing.Color.Tomato;
 			this.panel1.Controls.Add(this.label3);
 			this.panel1.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.panel1.Location = new System.Drawing.Point(0, -2);
@@ -277,11 +277,11 @@
 			// label3
 			// 
 			this.label3.AutoSize = true;
-			this.label3.Font = new System.Drawing.Font("Meiryo UI", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.label3.Font = new System.Drawing.Font("メイリオ", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.label3.ForeColor = System.Drawing.Color.White;
 			this.label3.Location = new System.Drawing.Point(89, 13);
 			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(79, 24);
+			this.label3.Size = new System.Drawing.Size(81, 28);
 			this.label3.TabIndex = 0;
 			this.label3.Text = "Claudia";
 			// 
