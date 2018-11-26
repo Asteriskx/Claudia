@@ -4,7 +4,7 @@ Claudia is SoundCloud Wrapper Application. (for me.)
 
 ![sample-wip](sample-wip.png)
 
-## License for Kisaragi
+## License for Claudia
 MIT License
 
 ## 使用した OS, IDE など
