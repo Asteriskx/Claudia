@@ -13,6 +13,8 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Text;
+using System.Drawing;
 
 namespace Claudia
 {
@@ -84,6 +86,21 @@ namespace Claudia
 		private void MainForm_Load(object sender, EventArgs e)
 		{
 			this._InitializeResultView();
+			var settings = Properties.Settings.Default;
+			var clientId = (string)settings["ClientId"] ?? string.Empty;
+			var token = (string)settings["Token"] ?? string.Empty;
+
+			if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(token))
+			{
+				this.loginInfo.Text = "Not Login...";
+				this.tokenInfo.Text = "Token acquired...";
+
+				this._ClientId = (string)settings["ClientId"];
+				this._Token = (string)settings["Token"];
+
+				this.loginButton.Enabled = false;
+				this._SCUsers = new SCUsers(this._Token, this._ClientId, HttpMethod.Get);
+			}
 		}
 
 		/// <summary>
@@ -94,7 +111,10 @@ namespace Claudia
 		private async void AccessButton_Click(object sender, EventArgs e)
 		{
 			await this.GetFavoriteSongsListAsync();
-			this.pictureBox1.ImageLocation = this._Favorite[0].ArtworkUrl ?? string.Empty;
+
+			this.pictureBox1.ImageLocation = this._Favorite[Count].ArtworkUrl ?? string.Empty;
+			this.NextAlbumArt.ImageLocation = this._Favorite[Count + 1].ArtworkUrl ?? string.Empty;
+			this.NextTrack.Text = this._Favorite[this.Count + 1].Title;
 
 			var data = this._Favorite.Where(x => x.StreamUrl != null).ToArray();
 			foreach (var item in data.Select((value, idx) => new { value, idx }))
@@ -112,25 +132,29 @@ namespace Claudia
 		/// <param name="e"></param>
 		private void loginButton_Click(object sender, EventArgs e)
 		{
-			if (string.IsNullOrEmpty(this._Token))
+			var settings = Properties.Settings.Default;
+			var clientId = (string)settings["ClientId"] ?? string.Empty;
+			var token = (string)settings["Token"] ?? string.Empty;
+
+			if (string.IsNullOrEmpty(clientId) && string.IsNullOrEmpty(token))
 			{
 				var form = new LoginForm();
 				if (form.ShowDialog() == DialogResult.OK)
 				{
 					this._ClientId = form.ClientId;
 					this._Token = form.Token;
+
+					settings["ClientId"] = this._ClientId;
+					settings["Token"] = this._Token;
+					settings.Save();
+
 					this.loginInfo.Text = "ログイン完了";
 					this.tokenInfo.Text = "トークン取得完了";
+					this.loginButton.Enabled = false;
+
+					this._SCUsers = new SCUsers(this._Token, this._ClientId, HttpMethod.Get);
 				}
 			}
-			else
-			{
-				this.loginInfo.Text = "トークンが取得されている為、ログインしませんでした。";
-				this.tokenInfo.Text = "トークン取得済み。";
-				Console.WriteLine("既にトークン取得完了しています。");
-			}
-
-			this._SCUsers = new SCUsers(this._Token, this._ClientId, HttpMethod.Get);
 		}
 
 		private void PlayButton_Click(object sender, EventArgs e)
@@ -140,6 +164,17 @@ namespace Claudia
 				Console.WriteLine($"play is = {track.Key} - {track.Value}");
 				Process.Start(_Properties.AimpProcessPath, track.Value);
 			}
+
+			var trackInfo = new StringBuilder();
+			trackInfo.Append($"Title : {this._Favorite[this.Count].Title}\r\n");
+			trackInfo.Append($"Artist : {this._Favorite[this.Count].User.UserName}\r\n");
+
+			var duration = this.GetCurrentTrackDuration(this._Favorite[this.Count].Duration);
+			trackInfo.Append($"Duration : {duration}\r\n");
+
+			trackInfo.Append($"Genre : {this._Favorite[this.Count].Genre}\r\n");
+			this.TrackInfo.Text = trackInfo.ToString();
+
 			nowState = State.Playing;
 		}
 
@@ -151,14 +186,32 @@ namespace Claudia
 
 		private void NextButton_Click(object sender, EventArgs e)
 		{
-			foreach (var track in this._FavTrack[Count])
+			this.Count++;
+			foreach (var track in this._FavTrack[this.Count])
 			{
 				this.pictureBox1.ImageLocation = this._Favorite[Count].ArtworkUrl ?? string.Empty;
+				this.NextAlbumArt.ImageLocation = this._Favorite[Count + 1].ArtworkUrl ?? string.Empty;
+				this.NextTrack.Text = this._Favorite[this.Count + 1].Title;
+
 				Console.WriteLine($"play is = {track.Key} - {track.Value}");
 				Process.Start(_Properties.AimpProcessPath, track.Value);
 			}
-			++Count;
+
+			var trackInfo = new StringBuilder();
+
+			trackInfo.Append($"Title : {this._Favorite[this.Count].Title}\r\n");
+			trackInfo.Append($"Artist : {this._Favorite[this.Count].User.UserName}\r\n");
+
+			var duration = this.GetCurrentTrackDuration(this._Favorite[this.Count].Duration);
+			trackInfo.Append($"Duration : {duration}\r\n");
+
+			trackInfo.Append($"Genre : {this._Favorite[this.Count].Genre}\r\n");
+
+			this.TrackInfo.Text = trackInfo.ToString();
 		}
+
+		private void LikesButton_MouseHover(object sender, EventArgs e) => this.LikesButton.BackColor = Color.FromArgb(0, 64, 64);
+		private void LikesButton_MouseLeave(object sender, EventArgs e) => this.LikesButton.BackColor = Color.Teal;
 
 		#endregion Event Methods
 
@@ -226,8 +279,16 @@ namespace Claudia
 
 			// TODO : 次取得
 			var nextUrl = pagenation.NextHref;
+
 		}
 		
+		private string GetCurrentTrackDuration(int position)
+		{
+			var totalSec = position / 1000;
+			var min = totalSec / 60;
+			var sec = totalSec % 60;
+			return $"{min:D2}:{sec:D2}";
+		}
 
 		#endregion Private Methods
 	}
