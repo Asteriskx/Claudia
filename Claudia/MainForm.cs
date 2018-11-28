@@ -27,7 +27,7 @@ namespace Claudia
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<SCFavoriteObjects> _Favorite { get; set; } = new List<SCFavoriteObjects>();
+		private List<SCFavoriteObjects> _Likes { get; set; } = new List<SCFavoriteObjects>();
 
 		/// <summary>
 		/// 
@@ -43,11 +43,6 @@ namespace Claudia
 		/// 
 		/// </summary>
 		private string _Token { get; set; } = string.Empty;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private Dictionary<int, Dictionary<string, string>> _FavTrack { get; set; } = new Dictionary<int, Dictionary<string, string>>();
 
 		/// <summary>
 		/// 
@@ -96,7 +91,6 @@ namespace Claudia
 		/// <param name="e"></param>
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			this._InitializeResultView();
 			var settings = Properties.Settings.Default;
 			var clientId = (string)settings["ClientId"] ?? string.Empty;
 			var token = (string)settings["Token"] ?? string.Empty;
@@ -107,7 +101,7 @@ namespace Claudia
 				this._Token = (string)settings["Token"];
 
 				this.statusLbl.Text = $"Login: No - Token: Acquired...";
-				this.loginButton.Enabled = false;
+				this.LoginButton.Enabled = false;
 				this._SCUsers = new SCUsers(this._Token, this._ClientId, HttpMethod.Get);
 			}
 		}
@@ -117,30 +111,7 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private async void AccessButton_Click(object sender, EventArgs e)
-		{
-			await this.GetFavoriteSongsListAsync();
-			await this.DefaultViewAlbumListAsync();
-
-			this.art1.ImageLocation = this._Favorite[Count].ArtworkUrl ?? string.Empty;
-			this.NextAlbumArt.ImageLocation = this._Favorite[Count + 1].ArtworkUrl ?? string.Empty;
-			this.NextTrack.Text = this._Favorite[this.Count + 1].Title;
-
-			var data = this._Favorite.Where(x => x.StreamUrl != null).ToArray();
-			foreach (var item in data.Select((value, idx) => new { value, idx }))
-			{
-				var url = $"{item.value.StreamUrl}?client_id={this._ClientId}";
-				this._FavTrack.Add(item.idx, new Dictionary<string, string>() { { item.value.Title, url } });
-				Console.WriteLine($"TrackInfo[{item.idx}] : {item.value.Title} - {url}");
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="e"></param>
-		private void loginButton_Click(object sender, EventArgs e)
+		private void LoginButton_Click(object sender, EventArgs e)
 		{
 			var settings = Properties.Settings.Default;
 			var clientId = (string)settings["ClientId"] ?? string.Empty;
@@ -158,10 +129,30 @@ namespace Claudia
 					settings["Token"] = this._Token;
 					settings.Save();
 
-					this.loginButton.Enabled = false;
+					this.LoginButton.Enabled = false;
 					this.statusLbl.Text = $"Login: Yes - Token: Acquired...";
 					this._SCUsers = new SCUsers(this._Token, this._ClientId, HttpMethod.Get);
 				}
+			}
+		}
+
+		private async void LikesButton_Click(object sender, EventArgs e)
+		{
+			await this.GetFavoriteSongsListAsync();
+			await this.DefaultViewAlbumListAsync();
+
+			var track = this._Likes[this.Count];
+			var nextTrack = this._Likes[this.Count + 1];
+
+			this.art1.ImageLocation = track.ArtworkUrl ?? string.Empty;
+			this.NextAlbumArt.ImageLocation = nextTrack.ArtworkUrl ?? string.Empty;
+			this.NextTrack.Text = nextTrack.Title;
+
+			var data = this._Likes.Where(x => x.StreamUrl != null).ToArray();
+			foreach (var item in data.Select((value, idx) => new { value, idx }))
+			{
+				var url = $"{item.value.StreamUrl}?client_id={this._ClientId}";
+				Console.WriteLine($"TrackInfo[{item.idx}] : {item.value.Title} - {url}");
 			}
 		}
 
@@ -174,23 +165,21 @@ namespace Claudia
 		{
 			if (!this._IsPlay)
 			{
-				nowState = State.Playing;
+				var track = this._Likes[this.Count];
 
-				foreach (var track in this._FavTrack[Count])
-				{
-					Console.WriteLine($"play is = {track.Key} - {track.Value}");
-					Process.Start(_Properties.AimpProcessPath, track.Value);
-				}
-
-				this.barArt.ImageLocation = this._Favorite[Count].ArtworkUrl ?? string.Empty;
-				this.barTrackInfo.Text = $"{this._Favorite[Count].Title} - {this._Favorite[Count].User.UserName}";
-				this.TrackDuration.Text = this.GetCurrentTrackDuration(this._Favorite[this.Count].Duration);
-				this.PlayButton.Image = Properties.Resources.pause;
+				this.nowState = State.Playing;
 				this._IsPlay = true;
+
+				this.barArt.ImageLocation = track.ArtworkUrl ?? string.Empty;
+				this.barTrackInfo.Text = $"{track.Title} - {track.User.UserName}";
+				this.TrackDuration.Text = this.GetCurrentTrackDuration(track.Duration);
+				this.PlayButton.Image = Properties.Resources.pause;
+
+				this._StartStreaming(track);
 			}
 			else
 			{
-				nowState = State.Playpause;
+				this.nowState = State.Playpause;
 				this._Commands.PlayPause();
 				this.PlayButton.Image = Properties.Resources.play;
 				this._IsPlay = false;
@@ -205,15 +194,8 @@ namespace Claudia
 		private void PrevButton_Click(object sender, EventArgs e)
 		{
 			this.Count--;
-			foreach (var track in this._FavTrack[this.Count])
-			{
-				this.art1.ImageLocation = this._Favorite[Count].ArtworkUrl ?? string.Empty;
-				this.NextAlbumArt.ImageLocation = this._Favorite[Count + 1].ArtworkUrl ?? string.Empty;
-				this.NextTrack.Text = this._Favorite[this.Count + 1].Title;
-
-				Console.WriteLine($"play is = {track.Key} - {track.Value}");
-				Process.Start(_Properties.AimpProcessPath, track.Value);
-			}
+			this._ArtworkLists(this.Count);
+			this._NextTrackInfo(this.Count);
 		}
 
 		/// <summary>
@@ -224,96 +206,82 @@ namespace Claudia
 		private void NextButton_Click(object sender, EventArgs e)
 		{
 			this.Count++;
-			foreach (var track in this._FavTrack[this.Count])
-			{
-				this.art1.ImageLocation = this._Favorite[Count].ArtworkUrl ?? string.Empty;
-				this.NextAlbumArt.ImageLocation = this._Favorite[Count + 1].ArtworkUrl ?? string.Empty;
-				this.NextTrack.Text = this._Favorite[this.Count + 1].Title;
-
-				Console.WriteLine($"play is = {track.Key} - {track.Value}");
-				Process.Start(_Properties.AimpProcessPath, track.Value);
-			}
+			this._ArtworkLists(this.Count);
+			this._NextTrackInfo(this.Count);
 		}
 
 		#region Artwork ClickEvents
 
 		private void art1_Click(object sender, EventArgs e) { }
-		private void art2_Click(object sender, EventArgs e) => this.ArtworkData(2);
-		private void art3_Click(object sender, EventArgs e) => this.ArtworkData(3);
-		private void art4_Click(object sender, EventArgs e) => this.ArtworkData(4);
-		private void art5_Click(object sender, EventArgs e) => this.ArtworkData(5);
-		private void art6_Click(object sender, EventArgs e) => this.ArtworkData(6);
-		private void art7_Click(object sender, EventArgs e) => this.ArtworkData(7);
-		private void art8_Click(object sender, EventArgs e) => this.ArtworkData(8);
-		private void art9_Click(object sender, EventArgs e) => this.ArtworkData(9);
-		private void art10_Click(object sender, EventArgs e) => this.ArtworkData(10);
-		private void art11_Click(object sender, EventArgs e) => this.ArtworkData(11);
-		private void art12_Click(object sender, EventArgs e) => this.ArtworkData(12);
-		private void art13_Click(object sender, EventArgs e) => this.ArtworkData(13);
-		private void art14_Click(object sender, EventArgs e) => this.ArtworkData(14);
-		private void art15_Click(object sender, EventArgs e) => this.ArtworkData(15);
-		private void art16_Click(object sender, EventArgs e) => this.ArtworkData(16);
-		private void art17_Click(object sender, EventArgs e) => this.ArtworkData(17);
-		private void art18_Click(object sender, EventArgs e) => this.ArtworkData(18);
-		private void art19_Click(object sender, EventArgs e) => this.ArtworkData(19);
-		private void art20_Click(object sender, EventArgs e) => this.ArtworkData(20);
-		private void art21_Click(object sender, EventArgs e) => this.ArtworkData(21);
-		private void art22_Click(object sender, EventArgs e) => this.ArtworkData(22);
-		private void art23_Click(object sender, EventArgs e) => this.ArtworkData(23);
-		private void art24_Click(object sender, EventArgs e) => this.ArtworkData(24);
-		private void art25_Click(object sender, EventArgs e) => this.ArtworkData(25);
-		private void art26_Click(object sender, EventArgs e) => this.ArtworkData(26);
-		private void art27_Click(object sender, EventArgs e) => this.ArtworkData(27);
-		private void art28_Click(object sender, EventArgs e) => this.ArtworkData(28);
+		private void art2_Click(object sender, EventArgs e) => this._ArtworkLists(2);
+		private void art3_Click(object sender, EventArgs e) => this._ArtworkLists(3);
+		private void art4_Click(object sender, EventArgs e) => this._ArtworkLists(4);
+		private void art5_Click(object sender, EventArgs e) => this._ArtworkLists(5);
+		private void art6_Click(object sender, EventArgs e) => this._ArtworkLists(6);
+		private void art7_Click(object sender, EventArgs e) => this._ArtworkLists(7);
+		private void art8_Click(object sender, EventArgs e) => this._ArtworkLists(8);
+		private void art9_Click(object sender, EventArgs e) => this._ArtworkLists(9);
+		private void art10_Click(object sender, EventArgs e) => this._ArtworkLists(10);
+		private void art11_Click(object sender, EventArgs e) => this._ArtworkLists(11);
+		private void art12_Click(object sender, EventArgs e) => this._ArtworkLists(12);
+		private void art13_Click(object sender, EventArgs e) => this._ArtworkLists(13);
+		private void art14_Click(object sender, EventArgs e) => this._ArtworkLists(14);
+		private void art15_Click(object sender, EventArgs e) => this._ArtworkLists(15);
+		private void art16_Click(object sender, EventArgs e) => this._ArtworkLists(16);
+		private void art17_Click(object sender, EventArgs e) => this._ArtworkLists(17);
+		private void art18_Click(object sender, EventArgs e) => this._ArtworkLists(18);
+		private void art19_Click(object sender, EventArgs e) => this._ArtworkLists(19);
+		private void art20_Click(object sender, EventArgs e) => this._ArtworkLists(20);
+		private void art21_Click(object sender, EventArgs e) => this._ArtworkLists(21);
+		private void art22_Click(object sender, EventArgs e) => this._ArtworkLists(22);
+		private void art23_Click(object sender, EventArgs e) => this._ArtworkLists(23);
+		private void art24_Click(object sender, EventArgs e) => this._ArtworkLists(24);
+		private void art25_Click(object sender, EventArgs e) => this._ArtworkLists(25);
+		private void art26_Click(object sender, EventArgs e) => this._ArtworkLists(26);
+		private void art27_Click(object sender, EventArgs e) => this._ArtworkLists(27);
+		private void art28_Click(object sender, EventArgs e) => this._ArtworkLists(28);
 
 		#endregion Artwork ClickEvents
 
 		#endregion Event Methods
 
-		#region Public Methods
-
-		#endregion Public Methods
-
 		#region Private Methods
 
 		/// <summary>
-		/// 取得リストビューの初期設定を行います。
+		/// Claudia メイン画面のアルバムアート一覧
 		/// </summary>
-		private void _InitializeResultView()
+		/// <returns></returns>
+		private async Task DefaultViewAlbumListAsync()
 		{
-			//// ヘッダ情報・ヘッダ幅
-			//var data = new Dictionary<string, int>()
-			//{
-			//	{ "トラック名", 150 },
-			//	{ "アーティスト名", 150 },
-			//	{ "アルバム名", 200 },
-			//	{ "再生回数", 100 },
-			//	{ "お気に入り数", 100 }
-			//};
-
-			//this.ResultView.FullRowSelect = true;
-			//this.ResultView.GridLines = true;
-			//this.ResultView.Sorting = SortOrder.Ascending;
-			//this.ResultView.View = View.Details;
-
-			//// ヘッダ追加
-			//foreach (var kvp in data)
-			//{
-			//	this.ResultView.Columns.Add(ColumnHeaderEx.GetColumnHeader(kvp.Key, kvp.Value));
-			//}
-
-			////// ユーザ情報反映
-			////foreach (var user in this._Twitter.User)
-			////{
-			////	var parentItem = this.ResultView.Items.Add(user.Id);
-			////	parentItem.SubItems.Add(user.ServiceName);
-
-			////	foreach (var file in user.FileName)
-			////		parentItem.SubItems.Add(file);
-
-			////	parentItem.SubItems.Add(user.Progress);
-			////	parentItem.SubItems.Add(user.Status);
-			////}
+			this.art2.ImageLocation = this._Likes[2].ArtworkUrl ?? string.Empty;
+			this.art3.ImageLocation = this._Likes[3].ArtworkUrl ?? string.Empty;
+			this.art4.ImageLocation = this._Likes[4].ArtworkUrl ?? string.Empty;
+			this.art5.ImageLocation = this._Likes[5].ArtworkUrl ?? string.Empty;
+			this.art6.ImageLocation = this._Likes[6].ArtworkUrl ?? string.Empty;
+			this.art7.ImageLocation = this._Likes[7].ArtworkUrl ?? string.Empty;
+			this.art8.ImageLocation = this._Likes[8].ArtworkUrl ?? string.Empty;
+			this.art9.ImageLocation = this._Likes[9].ArtworkUrl ?? string.Empty;
+			this.art10.ImageLocation = this._Likes[10].ArtworkUrl ?? string.Empty;
+			this.art11.ImageLocation = this._Likes[11].ArtworkUrl ?? string.Empty;
+			this.art12.ImageLocation = this._Likes[12].ArtworkUrl ?? string.Empty;
+			this.art13.ImageLocation = this._Likes[13].ArtworkUrl ?? string.Empty;
+			this.art14.ImageLocation = this._Likes[14].ArtworkUrl ?? string.Empty;
+			this.art15.ImageLocation = this._Likes[15].ArtworkUrl ?? string.Empty;
+			this.art16.ImageLocation = this._Likes[16].ArtworkUrl ?? string.Empty;
+			this.art17.ImageLocation = this._Likes[17].ArtworkUrl ?? string.Empty;
+			this.art18.ImageLocation = this._Likes[18].ArtworkUrl ?? string.Empty;
+			this.art19.ImageLocation = this._Likes[19].ArtworkUrl ?? string.Empty;
+			this.art20.ImageLocation = this._Likes[20].ArtworkUrl ?? string.Empty;
+			this.art21.ImageLocation = this._Likes[21].ArtworkUrl ?? string.Empty;
+			this.art20.ImageLocation = this._Likes[20].ArtworkUrl ?? string.Empty;
+			this.art21.ImageLocation = this._Likes[21].ArtworkUrl ?? string.Empty;
+			this.art22.ImageLocation = this._Likes[22].ArtworkUrl ?? string.Empty;
+			this.art23.ImageLocation = this._Likes[23].ArtworkUrl ?? string.Empty;
+			this.art24.ImageLocation = this._Likes[24].ArtworkUrl ?? string.Empty;
+			this.art25.ImageLocation = this._Likes[25].ArtworkUrl ?? string.Empty;
+			this.art26.ImageLocation = this._Likes[26].ArtworkUrl ?? string.Empty;
+			this.art27.ImageLocation = this._Likes[27].ArtworkUrl ?? string.Empty;
+			this.art28.ImageLocation = this._Likes[28].ArtworkUrl ?? string.Empty;
 		}
 
 		/// <summary>
@@ -330,11 +298,40 @@ namespace Claudia
 			resString = resString.Replace("large", "t500x500");
 
 			var pagenation = JsonConvert.DeserializeObject<Pagenation<SCFavoriteObjects>>(resString);
-			this._Favorite.AddRange(pagenation.Collection);
+			this._Likes.AddRange(pagenation.Collection);
 
 			// TODO : 次取得
 			var nextUrl = pagenation.NextHref;
+		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="position"></param>
+		private void _ArtworkLists(int position)
+		{
+			var track = this._Likes[position];
+			this.SelectArt.ImageLocation = track.ArtworkUrl ?? string.Empty;
+			this.SelectTrack.Text = track.Title;
+
+			this.barArt.ImageLocation = track.ArtworkUrl ?? string.Empty;
+			this.barTrackInfo.Text = $"{track.Title} - {track.User.UserName}";
+			this.TrackDuration.Text = this.GetCurrentTrackDuration(track.Duration);
+
+			this._StartStreaming(track);
+		}
+
+		private void _NextTrackInfo(int position)
+		{
+			var nextTrack = this._Likes[position + 1];
+			this.NextAlbumArt.ImageLocation = nextTrack.ArtworkUrl ?? string.Empty;
+			this.NextTrack.Text = nextTrack.Title;
+		}
+
+		private void _StartStreaming(SCFavoriteObjects track)
+		{
+			Process.Start(_Properties.AimpProcessPath, $"{track.Uri}/stream?client_id={this._ClientId}");
+			Console.WriteLine($"play is = {track.Title} - {track.Uri}/stream?client_id={this._ClientId}");
 		}
 
 		/// <summary>
@@ -348,63 +345,6 @@ namespace Claudia
 			var min = totalSec / 60;
 			var sec = totalSec % 60;
 			return $"{min:D2}:{sec:D2}";
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="position"></param>
-		private void ArtworkData(int position)
-		{
-			foreach (var track in this._FavTrack[position])
-			{
-				this.SelectArt.ImageLocation = this._Favorite[position].ArtworkUrl ?? string.Empty;
-				this.SelectTrack.Text = this._Favorite[position].Title;
-
-				this.barArt.ImageLocation = this._Favorite[position].ArtworkUrl ?? string.Empty;
-				this.barTrackInfo.Text = $"{this._Favorite[position].Title} - {this._Favorite[position].User.UserName}";
-				this.TrackDuration.Text = this.GetCurrentTrackDuration(this._Favorite[position].Duration);
-
-				Console.WriteLine($"play is = {track.Key} - {track.Value}");
-				Process.Start(_Properties.AimpProcessPath, track.Value);
-			}
-		}
-
-		/// <summary>
-		/// Claudia メイン画面のアルバムアート一覧
-		/// </summary>
-		/// <returns></returns>
-		private async Task DefaultViewAlbumListAsync()
-		{
-			this.art2.ImageLocation = this._Favorite[2].ArtworkUrl ?? string.Empty;
-			this.art3.ImageLocation = this._Favorite[3].ArtworkUrl ?? string.Empty;
-			this.art4.ImageLocation = this._Favorite[4].ArtworkUrl ?? string.Empty;
-			this.art5.ImageLocation = this._Favorite[5].ArtworkUrl ?? string.Empty;
-			this.art6.ImageLocation = this._Favorite[6].ArtworkUrl ?? string.Empty;
-			this.art7.ImageLocation = this._Favorite[7].ArtworkUrl ?? string.Empty;
-			this.art8.ImageLocation = this._Favorite[8].ArtworkUrl ?? string.Empty;
-			this.art9.ImageLocation = this._Favorite[9].ArtworkUrl ?? string.Empty;
-			this.art10.ImageLocation = this._Favorite[10].ArtworkUrl ?? string.Empty;
-			this.art11.ImageLocation = this._Favorite[11].ArtworkUrl ?? string.Empty;
-			this.art12.ImageLocation = this._Favorite[12].ArtworkUrl ?? string.Empty;
-			this.art13.ImageLocation = this._Favorite[13].ArtworkUrl ?? string.Empty;
-			this.art14.ImageLocation = this._Favorite[14].ArtworkUrl ?? string.Empty;
-			this.art15.ImageLocation = this._Favorite[15].ArtworkUrl ?? string.Empty;
-			this.art16.ImageLocation = this._Favorite[16].ArtworkUrl ?? string.Empty;
-			this.art17.ImageLocation = this._Favorite[17].ArtworkUrl ?? string.Empty;
-			this.art18.ImageLocation = this._Favorite[18].ArtworkUrl ?? string.Empty;
-			this.art19.ImageLocation = this._Favorite[19].ArtworkUrl ?? string.Empty;
-			this.art20.ImageLocation = this._Favorite[20].ArtworkUrl ?? string.Empty;
-			this.art21.ImageLocation = this._Favorite[21].ArtworkUrl ?? string.Empty;
-			this.art20.ImageLocation = this._Favorite[20].ArtworkUrl ?? string.Empty;
-			this.art21.ImageLocation = this._Favorite[21].ArtworkUrl ?? string.Empty;
-			this.art22.ImageLocation = this._Favorite[22].ArtworkUrl ?? string.Empty;
-			this.art23.ImageLocation = this._Favorite[23].ArtworkUrl ?? string.Empty;
-			this.art24.ImageLocation = this._Favorite[24].ArtworkUrl ?? string.Empty;
-			this.art25.ImageLocation = this._Favorite[25].ArtworkUrl ?? string.Empty;
-			this.art26.ImageLocation = this._Favorite[26].ArtworkUrl ?? string.Empty;
-			this.art27.ImageLocation = this._Favorite[27].ArtworkUrl ?? string.Empty;
-			this.art28.ImageLocation = this._Favorite[28].ArtworkUrl ?? string.Empty;
 		}
 
 		#endregion Private Methods

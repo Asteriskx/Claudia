@@ -60,6 +60,7 @@
 			this.label7 = new System.Windows.Forms.Label();
 			this.art1 = new System.Windows.Forms.PictureBox();
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.LoginButton = new System.Windows.Forms.Button();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.SelectTrack = new System.Windows.Forms.Label();
 			this.SelectArt = new System.Windows.Forms.PictureBox();
@@ -76,8 +77,6 @@
 			this.PrevButton = new System.Windows.Forms.Button();
 			this.PlayButton = new System.Windows.Forms.Button();
 			this.NextButton = new System.Windows.Forms.Button();
-			this.AccessButton = new System.Windows.Forms.Button();
-			this.loginButton = new System.Windows.Forms.Button();
 			this.Home = new System.Windows.Forms.Panel();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.statusLbl = new System.Windows.Forms.ToolStripStatusLabel();
@@ -452,6 +451,7 @@
 			// panel2
 			// 
 			this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.panel2.Controls.Add(this.LoginButton);
 			this.panel2.Controls.Add(this.groupBox4);
 			this.panel2.Controls.Add(this.groupBox3);
 			this.panel2.Controls.Add(this.LikesButton);
@@ -462,13 +462,29 @@
 			this.panel2.Size = new System.Drawing.Size(257, 610);
 			this.panel2.TabIndex = 5;
 			// 
+			// LoginButton
+			// 
+			this.LoginButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.LoginButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.LoginButton.ForeColor = System.Drawing.Color.White;
+			this.LoginButton.Image = global::Claudia.Properties.Resources.account;
+			this.LoginButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.LoginButton.Location = new System.Drawing.Point(0, 0);
+			this.LoginButton.Name = "LoginButton";
+			this.LoginButton.Size = new System.Drawing.Size(257, 48);
+			this.LoginButton.TabIndex = 17;
+			this.LoginButton.Text = "Login";
+			this.LoginButton.UseVisualStyleBackColor = false;
+			this.LoginButton.Click += new System.EventHandler(this.LoginButton_Click);
+			// 
 			// groupBox4
 			// 
 			this.groupBox4.Controls.Add(this.SelectTrack);
 			this.groupBox4.Controls.Add(this.SelectArt);
 			this.groupBox4.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.groupBox4.ForeColor = System.Drawing.Color.White;
-			this.groupBox4.Location = new System.Drawing.Point(11, 182);
+			this.groupBox4.Location = new System.Drawing.Point(11, 210);
 			this.groupBox4.Name = "groupBox4";
 			this.groupBox4.Size = new System.Drawing.Size(232, 173);
 			this.groupBox4.TabIndex = 16;
@@ -536,12 +552,13 @@
 			this.LikesButton.ForeColor = System.Drawing.Color.White;
 			this.LikesButton.Image = global::Claudia.Properties.Resources.fav;
 			this.LikesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.LikesButton.Location = new System.Drawing.Point(-1, 92);
+			this.LikesButton.Location = new System.Drawing.Point(0, 141);
 			this.LikesButton.Name = "LikesButton";
 			this.LikesButton.Size = new System.Drawing.Size(257, 48);
 			this.LikesButton.TabIndex = 2;
 			this.LikesButton.Text = "Likes";
 			this.LikesButton.UseVisualStyleBackColor = false;
+			this.LikesButton.Click += new System.EventHandler(this.LikesButton_Click);
 			// 
 			// PlayListsButton
 			// 
@@ -551,7 +568,7 @@
 			this.PlayListsButton.ForeColor = System.Drawing.Color.White;
 			this.PlayListsButton.Image = global::Claudia.Properties.Resources.playlist;
 			this.PlayListsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.PlayListsButton.Location = new System.Drawing.Point(-1, 46);
+			this.PlayListsButton.Location = new System.Drawing.Point(0, 94);
 			this.PlayListsButton.Name = "PlayListsButton";
 			this.PlayListsButton.Size = new System.Drawing.Size(257, 48);
 			this.PlayListsButton.TabIndex = 1;
@@ -566,7 +583,7 @@
 			this.StreamButton.ForeColor = System.Drawing.Color.White;
 			this.StreamButton.Image = global::Claudia.Properties.Resources.stream;
 			this.StreamButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.StreamButton.Location = new System.Drawing.Point(-1, 0);
+			this.StreamButton.Location = new System.Drawing.Point(0, 47);
 			this.StreamButton.Name = "StreamButton";
 			this.StreamButton.Size = new System.Drawing.Size(257, 48);
 			this.StreamButton.TabIndex = 0;
@@ -582,8 +599,6 @@
 			this.panel3.Controls.Add(this.PrevButton);
 			this.panel3.Controls.Add(this.PlayButton);
 			this.panel3.Controls.Add(this.NextButton);
-			this.panel3.Controls.Add(this.AccessButton);
-			this.panel3.Controls.Add(this.loginButton);
 			this.panel3.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.panel3.Location = new System.Drawing.Point(258, -2);
 			this.panel3.Name = "panel3";
@@ -594,7 +609,7 @@
 			// 
 			this.TrackDuration.AutoSize = true;
 			this.TrackDuration.ForeColor = System.Drawing.Color.White;
-			this.TrackDuration.Location = new System.Drawing.Point(845, 16);
+			this.TrackDuration.Location = new System.Drawing.Point(838, 16);
 			this.TrackDuration.Name = "TrackDuration";
 			this.TrackDuration.Size = new System.Drawing.Size(33, 18);
 			this.TrackDuration.TabIndex = 19;
@@ -605,8 +620,8 @@
 			this.barTrackInfo.AutoEllipsis = true;
 			this.barTrackInfo.AutoSize = true;
 			this.barTrackInfo.ForeColor = System.Drawing.Color.White;
-			this.barTrackInfo.Location = new System.Drawing.Point(165, 16);
-			this.barTrackInfo.MaximumSize = new System.Drawing.Size(500, 18);
+			this.barTrackInfo.Location = new System.Drawing.Point(53, 16);
+			this.barTrackInfo.MaximumSize = new System.Drawing.Size(600, 18);
 			this.barTrackInfo.Name = "barTrackInfo";
 			this.barTrackInfo.Size = new System.Drawing.Size(120, 18);
 			this.barTrackInfo.TabIndex = 18;
@@ -614,7 +629,7 @@
 			// 
 			// barArt
 			// 
-			this.barArt.Location = new System.Drawing.Point(126, 8);
+			this.barArt.Location = new System.Drawing.Point(14, 8);
 			this.barArt.Name = "barArt";
 			this.barArt.Size = new System.Drawing.Size(33, 35);
 			this.barArt.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -660,32 +675,6 @@
 			this.NextButton.UseVisualStyleBackColor = true;
 			this.NextButton.Click += new System.EventHandler(this.NextButton_Click);
 			// 
-			// AccessButton
-			// 
-			this.AccessButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.AccessButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.AccessButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.AccessButton.Image = global::Claudia.Properties.Resources.find;
-			this.AccessButton.Location = new System.Drawing.Point(56, 8);
-			this.AccessButton.Name = "AccessButton";
-			this.AccessButton.Size = new System.Drawing.Size(35, 35);
-			this.AccessButton.TabIndex = 5;
-			this.AccessButton.UseVisualStyleBackColor = true;
-			this.AccessButton.Click += new System.EventHandler(this.AccessButton_Click);
-			// 
-			// loginButton
-			// 
-			this.loginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-			this.loginButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.loginButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-			this.loginButton.Image = ((System.Drawing.Image)(resources.GetObject("loginButton.Image")));
-			this.loginButton.Location = new System.Drawing.Point(15, 8);
-			this.loginButton.Name = "loginButton";
-			this.loginButton.Size = new System.Drawing.Size(35, 35);
-			this.loginButton.TabIndex = 2;
-			this.loginButton.UseVisualStyleBackColor = true;
-			this.loginButton.Click += new System.EventHandler(this.loginButton_Click);
-			// 
 			// Home
 			// 
 			this.Home.BackColor = System.Drawing.Color.Tomato;
@@ -701,7 +690,7 @@
 			// 
 			this.statusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.statusLbl});
+            this.statusLbl});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 660);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(1293, 22);
@@ -777,11 +766,9 @@
 		}
 
 		#endregion
-		private System.Windows.Forms.Button loginButton;
 		private System.Windows.Forms.PictureBox art1;
 		private System.Windows.Forms.GroupBox groupBox2;
 		private System.Windows.Forms.Label label7;
-		private System.Windows.Forms.Button AccessButton;
 		private System.Windows.Forms.Button PlayButton;
 		private System.Windows.Forms.Button NextButton;
 		private System.Windows.Forms.Panel Home;
@@ -829,5 +816,6 @@
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripStatusLabel statusLbl;
 		private System.Windows.Forms.Label TrackDuration;
+		private System.Windows.Forms.Button LoginButton;
 	}
 }

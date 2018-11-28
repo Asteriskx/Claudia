@@ -88,7 +88,7 @@ namespace Claudia
 					this.Token = this._Visitor["oauth_token"].Value;
 					this.DialogResult = DialogResult.OK;
 					this.Close();
-					//Cef.Shutdown();
+					Cef.Shutdown();
 					return;
 				}
 
