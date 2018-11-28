@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.Reflection;
 
 namespace Claudia
 {
@@ -47,7 +48,7 @@ namespace Claudia
 		/// <summary>
 		/// 
 		/// </summary>
-		private int Count { get; set; } = 0;
+		private int _Count { get; set; } = 0;
 
 		/// <summary>
 		/// 
@@ -57,9 +58,11 @@ namespace Claudia
 		/// <summary>
 		/// 
 		/// </summary>
-		private enum State { Idle = 0, Playing, Playpause, Stop }
-		private State nowState = State.Idle;
-		private State oldState = State.Idle;
+		private enum State { Idle = 0, Playing, PlayPause, Stop }
+		private State _NowState = State.Idle;
+		private State _OldState = State.Idle;
+
+		private static readonly int _ArtworkNum = 28;
 
 		/// <summary>
 		/// 
@@ -91,6 +94,12 @@ namespace Claudia
 		/// <param name="e"></param>
 		private void MainForm_Load(object sender, EventArgs e)
 		{
+			foreach (var i in Enumerable.Range(1, _ArtworkNum))
+			{
+				var artwork = (PictureBox)_FindControlByFieldName(this, $"art{i}");
+				artwork.Click += (s, v) => this._ArtworkLists(i);
+			}
+
 			var settings = Properties.Settings.Default;
 			var clientId = (string)settings["ClientId"] ?? string.Empty;
 			var token = (string)settings["Token"] ?? string.Empty;
@@ -139,10 +148,10 @@ namespace Claudia
 		private async void LikesButton_Click(object sender, EventArgs e)
 		{
 			await this.GetFavoriteSongsListAsync();
-			await this.DefaultViewAlbumListAsync();
+			await this.DefaultViewAlbumListAsync(_ArtworkNum);
 
-			var track = this._Likes[this.Count];
-			var nextTrack = this._Likes[this.Count + 1];
+			var track = this._Likes[this._Count];
+			var nextTrack = this._Likes[this._Count + 1];
 
 			this.art1.ImageLocation = track.ArtworkUrl ?? string.Empty;
 			this.NextAlbumArt.ImageLocation = nextTrack.ArtworkUrl ?? string.Empty;
@@ -165,9 +174,9 @@ namespace Claudia
 		{
 			if (!this._IsPlay)
 			{
-				var track = this._Likes[this.Count];
+				var track = this._Likes[this._Count];
 
-				this.nowState = State.Playing;
+				this._NowState = State.Playing;
 				this._IsPlay = true;
 
 				this.barArt.ImageLocation = track.ArtworkUrl ?? string.Empty;
@@ -179,7 +188,7 @@ namespace Claudia
 			}
 			else
 			{
-				this.nowState = State.Playpause;
+				this._NowState = State.PlayPause;
 				this._Commands.PlayPause();
 				this.PlayButton.Image = Properties.Resources.play;
 				this._IsPlay = false;
@@ -193,9 +202,9 @@ namespace Claudia
 		/// <param name="e"></param>
 		private void PrevButton_Click(object sender, EventArgs e)
 		{
-			this.Count--;
-			this._ArtworkLists(this.Count);
-			this._NextTrackInfo(this.Count);
+			this._Count--;
+			this._ArtworkLists(this._Count);
+			this._NextTrackInfo(this._Count);
 		}
 
 		/// <summary>
@@ -205,43 +214,10 @@ namespace Claudia
 		/// <param name="e"></param>
 		private void NextButton_Click(object sender, EventArgs e)
 		{
-			this.Count++;
-			this._ArtworkLists(this.Count);
-			this._NextTrackInfo(this.Count);
+			this._Count++;
+			this._ArtworkLists(this._Count);
+			this._NextTrackInfo(this._Count);
 		}
-
-		#region Artwork ClickEvents
-
-		private void art1_Click(object sender, EventArgs e) { }
-		private void art2_Click(object sender, EventArgs e) => this._ArtworkLists(2);
-		private void art3_Click(object sender, EventArgs e) => this._ArtworkLists(3);
-		private void art4_Click(object sender, EventArgs e) => this._ArtworkLists(4);
-		private void art5_Click(object sender, EventArgs e) => this._ArtworkLists(5);
-		private void art6_Click(object sender, EventArgs e) => this._ArtworkLists(6);
-		private void art7_Click(object sender, EventArgs e) => this._ArtworkLists(7);
-		private void art8_Click(object sender, EventArgs e) => this._ArtworkLists(8);
-		private void art9_Click(object sender, EventArgs e) => this._ArtworkLists(9);
-		private void art10_Click(object sender, EventArgs e) => this._ArtworkLists(10);
-		private void art11_Click(object sender, EventArgs e) => this._ArtworkLists(11);
-		private void art12_Click(object sender, EventArgs e) => this._ArtworkLists(12);
-		private void art13_Click(object sender, EventArgs e) => this._ArtworkLists(13);
-		private void art14_Click(object sender, EventArgs e) => this._ArtworkLists(14);
-		private void art15_Click(object sender, EventArgs e) => this._ArtworkLists(15);
-		private void art16_Click(object sender, EventArgs e) => this._ArtworkLists(16);
-		private void art17_Click(object sender, EventArgs e) => this._ArtworkLists(17);
-		private void art18_Click(object sender, EventArgs e) => this._ArtworkLists(18);
-		private void art19_Click(object sender, EventArgs e) => this._ArtworkLists(19);
-		private void art20_Click(object sender, EventArgs e) => this._ArtworkLists(20);
-		private void art21_Click(object sender, EventArgs e) => this._ArtworkLists(21);
-		private void art22_Click(object sender, EventArgs e) => this._ArtworkLists(22);
-		private void art23_Click(object sender, EventArgs e) => this._ArtworkLists(23);
-		private void art24_Click(object sender, EventArgs e) => this._ArtworkLists(24);
-		private void art25_Click(object sender, EventArgs e) => this._ArtworkLists(25);
-		private void art26_Click(object sender, EventArgs e) => this._ArtworkLists(26);
-		private void art27_Click(object sender, EventArgs e) => this._ArtworkLists(27);
-		private void art28_Click(object sender, EventArgs e) => this._ArtworkLists(28);
-
-		#endregion Artwork ClickEvents
 
 		#endregion Event Methods
 
@@ -251,37 +227,27 @@ namespace Claudia
 		/// Claudia メイン画面のアルバムアート一覧
 		/// </summary>
 		/// <returns></returns>
-		private async Task DefaultViewAlbumListAsync()
+		private async Task DefaultViewAlbumListAsync(int count)
 		{
-			this.art2.ImageLocation = this._Likes[2].ArtworkUrl ?? string.Empty;
-			this.art3.ImageLocation = this._Likes[3].ArtworkUrl ?? string.Empty;
-			this.art4.ImageLocation = this._Likes[4].ArtworkUrl ?? string.Empty;
-			this.art5.ImageLocation = this._Likes[5].ArtworkUrl ?? string.Empty;
-			this.art6.ImageLocation = this._Likes[6].ArtworkUrl ?? string.Empty;
-			this.art7.ImageLocation = this._Likes[7].ArtworkUrl ?? string.Empty;
-			this.art8.ImageLocation = this._Likes[8].ArtworkUrl ?? string.Empty;
-			this.art9.ImageLocation = this._Likes[9].ArtworkUrl ?? string.Empty;
-			this.art10.ImageLocation = this._Likes[10].ArtworkUrl ?? string.Empty;
-			this.art11.ImageLocation = this._Likes[11].ArtworkUrl ?? string.Empty;
-			this.art12.ImageLocation = this._Likes[12].ArtworkUrl ?? string.Empty;
-			this.art13.ImageLocation = this._Likes[13].ArtworkUrl ?? string.Empty;
-			this.art14.ImageLocation = this._Likes[14].ArtworkUrl ?? string.Empty;
-			this.art15.ImageLocation = this._Likes[15].ArtworkUrl ?? string.Empty;
-			this.art16.ImageLocation = this._Likes[16].ArtworkUrl ?? string.Empty;
-			this.art17.ImageLocation = this._Likes[17].ArtworkUrl ?? string.Empty;
-			this.art18.ImageLocation = this._Likes[18].ArtworkUrl ?? string.Empty;
-			this.art19.ImageLocation = this._Likes[19].ArtworkUrl ?? string.Empty;
-			this.art20.ImageLocation = this._Likes[20].ArtworkUrl ?? string.Empty;
-			this.art21.ImageLocation = this._Likes[21].ArtworkUrl ?? string.Empty;
-			this.art20.ImageLocation = this._Likes[20].ArtworkUrl ?? string.Empty;
-			this.art21.ImageLocation = this._Likes[21].ArtworkUrl ?? string.Empty;
-			this.art22.ImageLocation = this._Likes[22].ArtworkUrl ?? string.Empty;
-			this.art23.ImageLocation = this._Likes[23].ArtworkUrl ?? string.Empty;
-			this.art24.ImageLocation = this._Likes[24].ArtworkUrl ?? string.Empty;
-			this.art25.ImageLocation = this._Likes[25].ArtworkUrl ?? string.Empty;
-			this.art26.ImageLocation = this._Likes[26].ArtworkUrl ?? string.Empty;
-			this.art27.ImageLocation = this._Likes[27].ArtworkUrl ?? string.Empty;
-			this.art28.ImageLocation = this._Likes[28].ArtworkUrl ?? string.Empty;
+			foreach (var i in Enumerable.Range(1, count))
+			{
+				var artwork = (PictureBox)_FindControlByFieldName(this, $"art{i}");
+				artwork.ImageLocation = this._Likes[i].ArtworkUrl ?? string.Empty;
+			}
+		}
+
+		/// <summary>
+		/// フォームに配置されているコントロールを名前で検索します
+		/// </summary>
+		/// <param name="frm">コントロールを探すフォーム</param>
+		/// <param name="name">コントロール（フィールド）の名前</param>
+		/// <returns>見つかった時は、コントロールのオブジェクト。
+		/// 見つからなかった時は、null </returns>
+		private static object _FindControlByFieldName(Form form, string name)
+		{
+			Type t = form.GetType();
+			FieldInfo fi = t.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+			return fi?.GetValue(form);
 		}
 
 		/// <summary>

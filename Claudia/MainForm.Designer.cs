@@ -168,7 +168,6 @@
 			this.art22.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art22.TabIndex = 59;
 			this.art22.TabStop = false;
-			this.art22.Click += new System.EventHandler(this.art22_Click);
 			// 
 			// art23
 			// 
@@ -178,7 +177,6 @@
 			this.art23.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art23.TabIndex = 58;
 			this.art23.TabStop = false;
-			this.art23.Click += new System.EventHandler(this.art23_Click);
 			// 
 			// art24
 			// 
@@ -188,7 +186,6 @@
 			this.art24.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art24.TabIndex = 57;
 			this.art24.TabStop = false;
-			this.art24.Click += new System.EventHandler(this.art24_Click);
 			// 
 			// art25
 			// 
@@ -198,7 +195,6 @@
 			this.art25.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art25.TabIndex = 56;
 			this.art25.TabStop = false;
-			this.art25.Click += new System.EventHandler(this.art25_Click);
 			// 
 			// art26
 			// 
@@ -208,7 +204,6 @@
 			this.art26.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art26.TabIndex = 55;
 			this.art26.TabStop = false;
-			this.art26.Click += new System.EventHandler(this.art26_Click);
 			// 
 			// art27
 			// 
@@ -218,7 +213,6 @@
 			this.art27.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art27.TabIndex = 54;
 			this.art27.TabStop = false;
-			this.art27.Click += new System.EventHandler(this.art27_Click);
 			// 
 			// art28
 			// 
@@ -228,7 +222,6 @@
 			this.art28.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art28.TabIndex = 53;
 			this.art28.TabStop = false;
-			this.art28.Click += new System.EventHandler(this.art28_Click);
 			// 
 			// art15
 			// 
@@ -238,7 +231,6 @@
 			this.art15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art15.TabIndex = 52;
 			this.art15.TabStop = false;
-			this.art15.Click += new System.EventHandler(this.art15_Click);
 			// 
 			// art16
 			// 
@@ -248,7 +240,6 @@
 			this.art16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art16.TabIndex = 50;
 			this.art16.TabStop = false;
-			this.art16.Click += new System.EventHandler(this.art16_Click);
 			// 
 			// art17
 			// 
@@ -258,7 +249,6 @@
 			this.art17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art17.TabIndex = 48;
 			this.art17.TabStop = false;
-			this.art17.Click += new System.EventHandler(this.art17_Click);
 			// 
 			// art18
 			// 
@@ -268,7 +258,6 @@
 			this.art18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art18.TabIndex = 46;
 			this.art18.TabStop = false;
-			this.art18.Click += new System.EventHandler(this.art18_Click);
 			// 
 			// art19
 			// 
@@ -278,7 +267,6 @@
 			this.art19.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art19.TabIndex = 44;
 			this.art19.TabStop = false;
-			this.art19.Click += new System.EventHandler(this.art19_Click);
 			// 
 			// art20
 			// 
@@ -288,7 +276,6 @@
 			this.art20.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art20.TabIndex = 42;
 			this.art20.TabStop = false;
-			this.art20.Click += new System.EventHandler(this.art20_Click);
 			// 
 			// art21
 			// 
@@ -298,7 +285,6 @@
 			this.art21.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art21.TabIndex = 40;
 			this.art21.TabStop = false;
-			this.art21.Click += new System.EventHandler(this.art21_Click);
 			// 
 			// art8
 			// 
@@ -308,7 +294,6 @@
 			this.art8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art8.TabIndex = 38;
 			this.art8.TabStop = false;
-			this.art8.Click += new System.EventHandler(this.art8_Click);
 			// 
 			// art9
 			// 
@@ -318,7 +303,6 @@
 			this.art9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art9.TabIndex = 36;
 			this.art9.TabStop = false;
-			this.art9.Click += new System.EventHandler(this.art9_Click);
 			// 
 			// art10
 			// 
@@ -328,7 +312,6 @@
 			this.art10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art10.TabIndex = 34;
 			this.art10.TabStop = false;
-			this.art10.Click += new System.EventHandler(this.art10_Click);
 			// 
 			// art11
 			// 
@@ -338,7 +321,6 @@
 			this.art11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art11.TabIndex = 32;
 			this.art11.TabStop = false;
-			this.art11.Click += new System.EventHandler(this.art11_Click);
 			// 
 			// art12
 			// 
@@ -348,7 +330,6 @@
 			this.art12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art12.TabIndex = 30;
 			this.art12.TabStop = false;
-			this.art12.Click += new System.EventHandler(this.art12_Click);
 			// 
 			// art13
 			// 
@@ -358,7 +339,6 @@
 			this.art13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art13.TabIndex = 28;
 			this.art13.TabStop = false;
-			this.art13.Click += new System.EventHandler(this.art13_Click);
 			// 
 			// art14
 			// 
@@ -368,7 +348,6 @@
 			this.art14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art14.TabIndex = 26;
 			this.art14.TabStop = false;
-			this.art14.Click += new System.EventHandler(this.art14_Click);
 			// 
 			// art7
 			// 
@@ -378,7 +357,6 @@
 			this.art7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art7.TabIndex = 24;
 			this.art7.TabStop = false;
-			this.art7.Click += new System.EventHandler(this.art7_Click);
 			// 
 			// art4
 			// 
@@ -388,7 +366,6 @@
 			this.art4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art4.TabIndex = 22;
 			this.art4.TabStop = false;
-			this.art4.Click += new System.EventHandler(this.art4_Click);
 			// 
 			// art5
 			// 
@@ -398,7 +375,6 @@
 			this.art5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art5.TabIndex = 20;
 			this.art5.TabStop = false;
-			this.art5.Click += new System.EventHandler(this.art5_Click);
 			// 
 			// art6
 			// 
@@ -408,7 +384,6 @@
 			this.art6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art6.TabIndex = 18;
 			this.art6.TabStop = false;
-			this.art6.Click += new System.EventHandler(this.art6_Click);
 			// 
 			// art3
 			// 
@@ -418,7 +393,6 @@
 			this.art3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art3.TabIndex = 16;
 			this.art3.TabStop = false;
-			this.art3.Click += new System.EventHandler(this.art3_Click);
 			// 
 			// art2
 			// 
@@ -428,7 +402,6 @@
 			this.art2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art2.TabIndex = 14;
 			this.art2.TabStop = false;
-			this.art2.Click += new System.EventHandler(this.art2_Click);
 			// 
 			// label7
 			// 
@@ -446,7 +419,6 @@
 			this.art1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
 			this.art1.TabIndex = 1;
 			this.art1.TabStop = false;
-			this.art1.Click += new System.EventHandler(this.art1_Click);
 			// 
 			// panel2
 			// 
