@@ -1,6 +1,6 @@
 ﻿namespace Claudia
 {
-	partial class MiniWindow
+	partial class MiniForm
 	{
 		/// <summary>
 		/// Required designer variable.
@@ -28,7 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MiniWindow));
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MiniForm));
 			this.Artwork = new System.Windows.Forms.PictureBox();
 			this.Title = new System.Windows.Forms.Label();
 			this.Artist = new System.Windows.Forms.Label();
@@ -38,7 +38,7 @@
 			// 
 			// Artwork
 			// 
-			this.Artwork.Location = new System.Drawing.Point(1, 0);
+			this.Artwork.Location = new System.Drawing.Point(0, 0);
 			this.Artwork.Name = "Artwork";
 			this.Artwork.Size = new System.Drawing.Size(120, 120);
 			this.Artwork.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -47,10 +47,12 @@
 			// 
 			// Title
 			// 
+			this.Title.AutoEllipsis = true;
 			this.Title.AutoSize = true;
 			this.Title.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.Title.ForeColor = System.Drawing.Color.White;
 			this.Title.Location = new System.Drawing.Point(140, 21);
+			this.Title.MaximumSize = new System.Drawing.Size(250, 18);
 			this.Title.Name = "Title";
 			this.Title.Size = new System.Drawing.Size(34, 18);
 			this.Title.TabIndex = 1;
@@ -58,10 +60,12 @@
 			// 
 			// Artist
 			// 
+			this.Artist.AutoEllipsis = true;
 			this.Artist.AutoSize = true;
 			this.Artist.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.Artist.ForeColor = System.Drawing.Color.White;
 			this.Artist.Location = new System.Drawing.Point(140, 50);
+			this.Artist.MaximumSize = new System.Drawing.Size(250, 18);
 			this.Artist.Name = "Artist";
 			this.Artist.Size = new System.Drawing.Size(40, 18);
 			this.Artist.TabIndex = 2;
@@ -78,7 +82,7 @@
 			this.Duration.TabIndex = 3;
 			this.Duration.Text = "Duration";
 			// 
-			// MiniWindow
+			// MiniForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -90,8 +94,8 @@
 			this.Controls.Add(this.Artwork);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.Name = "MiniWindow";
-			this.Text = "MiniWindow";
+			this.Name = "MiniForm";
+			this.Text = "NowPlaying";
 			this.Load += new System.EventHandler(this.MiniWindow_Load);
 			((System.ComponentModel.ISupportInitialize)(this.Artwork)).EndInit();
 			this.ResumeLayout(false);

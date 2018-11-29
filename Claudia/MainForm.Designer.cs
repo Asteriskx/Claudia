@@ -29,36 +29,6 @@
 		private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-			this.groupBox2 = new System.Windows.Forms.GroupBox();
-			this.art22 = new System.Windows.Forms.PictureBox();
-			this.art23 = new System.Windows.Forms.PictureBox();
-			this.art24 = new System.Windows.Forms.PictureBox();
-			this.art25 = new System.Windows.Forms.PictureBox();
-			this.art26 = new System.Windows.Forms.PictureBox();
-			this.art27 = new System.Windows.Forms.PictureBox();
-			this.art28 = new System.Windows.Forms.PictureBox();
-			this.art15 = new System.Windows.Forms.PictureBox();
-			this.art16 = new System.Windows.Forms.PictureBox();
-			this.art17 = new System.Windows.Forms.PictureBox();
-			this.art18 = new System.Windows.Forms.PictureBox();
-			this.art19 = new System.Windows.Forms.PictureBox();
-			this.art20 = new System.Windows.Forms.PictureBox();
-			this.art21 = new System.Windows.Forms.PictureBox();
-			this.art8 = new System.Windows.Forms.PictureBox();
-			this.art9 = new System.Windows.Forms.PictureBox();
-			this.art10 = new System.Windows.Forms.PictureBox();
-			this.art11 = new System.Windows.Forms.PictureBox();
-			this.art12 = new System.Windows.Forms.PictureBox();
-			this.art13 = new System.Windows.Forms.PictureBox();
-			this.art14 = new System.Windows.Forms.PictureBox();
-			this.art7 = new System.Windows.Forms.PictureBox();
-			this.art4 = new System.Windows.Forms.PictureBox();
-			this.art5 = new System.Windows.Forms.PictureBox();
-			this.art6 = new System.Windows.Forms.PictureBox();
-			this.art3 = new System.Windows.Forms.PictureBox();
-			this.art2 = new System.Windows.Forms.PictureBox();
-			this.label7 = new System.Windows.Forms.Label();
-			this.art1 = new System.Windows.Forms.PictureBox();
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.PlayerButton = new System.Windows.Forms.Button();
 			this.LoginButton = new System.Windows.Forms.Button();
@@ -82,35 +52,7 @@
 			this.axWindowsMediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.statusLbl = new System.Windows.Forms.ToolStripStatusLabel();
-			this.groupBox2.SuspendLayout();
-			((System.ComponentModel.ISupportInitialize)(this.art22)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art23)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art24)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art25)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art26)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art27)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art28)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art15)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art16)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art17)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art18)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art19)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art20)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art21)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art8)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art9)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art10)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art11)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art12)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art13)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art14)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art7)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art4)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art5)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art6)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art3)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art2)).BeginInit();
-			((System.ComponentModel.ISupportInitialize)(this.art1)).BeginInit();
+			this.artPanel = new System.Windows.Forms.FlowLayoutPanel();
 			this.panel2.SuspendLayout();
 			this.groupBox4.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.SelectArt)).BeginInit();
@@ -122,307 +64,6 @@
 			((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer)).BeginInit();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
-			// 
-			// groupBox2
-			// 
-			this.groupBox2.BackColor = System.Drawing.SystemColors.Control;
-			this.groupBox2.Controls.Add(this.art22);
-			this.groupBox2.Controls.Add(this.art23);
-			this.groupBox2.Controls.Add(this.art24);
-			this.groupBox2.Controls.Add(this.art25);
-			this.groupBox2.Controls.Add(this.art26);
-			this.groupBox2.Controls.Add(this.art27);
-			this.groupBox2.Controls.Add(this.art28);
-			this.groupBox2.Controls.Add(this.art15);
-			this.groupBox2.Controls.Add(this.art16);
-			this.groupBox2.Controls.Add(this.art17);
-			this.groupBox2.Controls.Add(this.art18);
-			this.groupBox2.Controls.Add(this.art19);
-			this.groupBox2.Controls.Add(this.art20);
-			this.groupBox2.Controls.Add(this.art21);
-			this.groupBox2.Controls.Add(this.art8);
-			this.groupBox2.Controls.Add(this.art9);
-			this.groupBox2.Controls.Add(this.art10);
-			this.groupBox2.Controls.Add(this.art11);
-			this.groupBox2.Controls.Add(this.art12);
-			this.groupBox2.Controls.Add(this.art13);
-			this.groupBox2.Controls.Add(this.art14);
-			this.groupBox2.Controls.Add(this.art7);
-			this.groupBox2.Controls.Add(this.art4);
-			this.groupBox2.Controls.Add(this.art5);
-			this.groupBox2.Controls.Add(this.art6);
-			this.groupBox2.Controls.Add(this.art3);
-			this.groupBox2.Controls.Add(this.art2);
-			this.groupBox2.Controls.Add(this.label7);
-			this.groupBox2.Controls.Add(this.art1);
-			this.groupBox2.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.groupBox2.ForeColor = System.Drawing.Color.Blue;
-			this.groupBox2.Location = new System.Drawing.Point(264, 54);
-			this.groupBox2.Name = "groupBox2";
-			this.groupBox2.Size = new System.Drawing.Size(1017, 590);
-			this.groupBox2.TabIndex = 2;
-			this.groupBox2.TabStop = false;
-			this.groupBox2.Text = "TrackInfo";
-			// 
-			// art22
-			// 
-			this.art22.Location = new System.Drawing.Point(18, 444);
-			this.art22.Name = "art22";
-			this.art22.Size = new System.Drawing.Size(135, 134);
-			this.art22.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art22.TabIndex = 59;
-			this.art22.TabStop = false;
-			// 
-			// art23
-			// 
-			this.art23.Location = new System.Drawing.Point(159, 444);
-			this.art23.Name = "art23";
-			this.art23.Size = new System.Drawing.Size(135, 134);
-			this.art23.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art23.TabIndex = 58;
-			this.art23.TabStop = false;
-			// 
-			// art24
-			// 
-			this.art24.Location = new System.Drawing.Point(300, 444);
-			this.art24.Name = "art24";
-			this.art24.Size = new System.Drawing.Size(135, 134);
-			this.art24.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art24.TabIndex = 57;
-			this.art24.TabStop = false;
-			// 
-			// art25
-			// 
-			this.art25.Location = new System.Drawing.Point(441, 444);
-			this.art25.Name = "art25";
-			this.art25.Size = new System.Drawing.Size(135, 134);
-			this.art25.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art25.TabIndex = 56;
-			this.art25.TabStop = false;
-			// 
-			// art26
-			// 
-			this.art26.Location = new System.Drawing.Point(582, 444);
-			this.art26.Name = "art26";
-			this.art26.Size = new System.Drawing.Size(135, 134);
-			this.art26.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art26.TabIndex = 55;
-			this.art26.TabStop = false;
-			// 
-			// art27
-			// 
-			this.art27.Location = new System.Drawing.Point(723, 444);
-			this.art27.Name = "art27";
-			this.art27.Size = new System.Drawing.Size(135, 134);
-			this.art27.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art27.TabIndex = 54;
-			this.art27.TabStop = false;
-			// 
-			// art28
-			// 
-			this.art28.Location = new System.Drawing.Point(864, 444);
-			this.art28.Name = "art28";
-			this.art28.Size = new System.Drawing.Size(135, 134);
-			this.art28.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art28.TabIndex = 53;
-			this.art28.TabStop = false;
-			// 
-			// art15
-			// 
-			this.art15.Location = new System.Drawing.Point(18, 304);
-			this.art15.Name = "art15";
-			this.art15.Size = new System.Drawing.Size(135, 134);
-			this.art15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art15.TabIndex = 52;
-			this.art15.TabStop = false;
-			// 
-			// art16
-			// 
-			this.art16.Location = new System.Drawing.Point(159, 304);
-			this.art16.Name = "art16";
-			this.art16.Size = new System.Drawing.Size(135, 134);
-			this.art16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art16.TabIndex = 50;
-			this.art16.TabStop = false;
-			// 
-			// art17
-			// 
-			this.art17.Location = new System.Drawing.Point(300, 304);
-			this.art17.Name = "art17";
-			this.art17.Size = new System.Drawing.Size(135, 134);
-			this.art17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art17.TabIndex = 48;
-			this.art17.TabStop = false;
-			// 
-			// art18
-			// 
-			this.art18.Location = new System.Drawing.Point(441, 304);
-			this.art18.Name = "art18";
-			this.art18.Size = new System.Drawing.Size(135, 134);
-			this.art18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art18.TabIndex = 46;
-			this.art18.TabStop = false;
-			// 
-			// art19
-			// 
-			this.art19.Location = new System.Drawing.Point(582, 304);
-			this.art19.Name = "art19";
-			this.art19.Size = new System.Drawing.Size(135, 134);
-			this.art19.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art19.TabIndex = 44;
-			this.art19.TabStop = false;
-			// 
-			// art20
-			// 
-			this.art20.Location = new System.Drawing.Point(723, 304);
-			this.art20.Name = "art20";
-			this.art20.Size = new System.Drawing.Size(135, 134);
-			this.art20.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art20.TabIndex = 42;
-			this.art20.TabStop = false;
-			// 
-			// art21
-			// 
-			this.art21.Location = new System.Drawing.Point(864, 304);
-			this.art21.Name = "art21";
-			this.art21.Size = new System.Drawing.Size(135, 134);
-			this.art21.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art21.TabIndex = 40;
-			this.art21.TabStop = false;
-			// 
-			// art8
-			// 
-			this.art8.Location = new System.Drawing.Point(18, 164);
-			this.art8.Name = "art8";
-			this.art8.Size = new System.Drawing.Size(135, 134);
-			this.art8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art8.TabIndex = 38;
-			this.art8.TabStop = false;
-			// 
-			// art9
-			// 
-			this.art9.Location = new System.Drawing.Point(159, 164);
-			this.art9.Name = "art9";
-			this.art9.Size = new System.Drawing.Size(135, 134);
-			this.art9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art9.TabIndex = 36;
-			this.art9.TabStop = false;
-			// 
-			// art10
-			// 
-			this.art10.Location = new System.Drawing.Point(300, 164);
-			this.art10.Name = "art10";
-			this.art10.Size = new System.Drawing.Size(135, 134);
-			this.art10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art10.TabIndex = 34;
-			this.art10.TabStop = false;
-			// 
-			// art11
-			// 
-			this.art11.Location = new System.Drawing.Point(441, 164);
-			this.art11.Name = "art11";
-			this.art11.Size = new System.Drawing.Size(135, 134);
-			this.art11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art11.TabIndex = 32;
-			this.art11.TabStop = false;
-			// 
-			// art12
-			// 
-			this.art12.Location = new System.Drawing.Point(582, 164);
-			this.art12.Name = "art12";
-			this.art12.Size = new System.Drawing.Size(135, 134);
-			this.art12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art12.TabIndex = 30;
-			this.art12.TabStop = false;
-			// 
-			// art13
-			// 
-			this.art13.Location = new System.Drawing.Point(723, 164);
-			this.art13.Name = "art13";
-			this.art13.Size = new System.Drawing.Size(135, 134);
-			this.art13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art13.TabIndex = 28;
-			this.art13.TabStop = false;
-			// 
-			// art14
-			// 
-			this.art14.Location = new System.Drawing.Point(864, 164);
-			this.art14.Name = "art14";
-			this.art14.Size = new System.Drawing.Size(135, 134);
-			this.art14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art14.TabIndex = 26;
-			this.art14.TabStop = false;
-			// 
-			// art7
-			// 
-			this.art7.Location = new System.Drawing.Point(864, 24);
-			this.art7.Name = "art7";
-			this.art7.Size = new System.Drawing.Size(135, 134);
-			this.art7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art7.TabIndex = 24;
-			this.art7.TabStop = false;
-			// 
-			// art4
-			// 
-			this.art4.Location = new System.Drawing.Point(441, 24);
-			this.art4.Name = "art4";
-			this.art4.Size = new System.Drawing.Size(135, 134);
-			this.art4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art4.TabIndex = 22;
-			this.art4.TabStop = false;
-			// 
-			// art5
-			// 
-			this.art5.Location = new System.Drawing.Point(582, 24);
-			this.art5.Name = "art5";
-			this.art5.Size = new System.Drawing.Size(135, 134);
-			this.art5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art5.TabIndex = 20;
-			this.art5.TabStop = false;
-			// 
-			// art6
-			// 
-			this.art6.Location = new System.Drawing.Point(723, 24);
-			this.art6.Name = "art6";
-			this.art6.Size = new System.Drawing.Size(135, 134);
-			this.art6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art6.TabIndex = 18;
-			this.art6.TabStop = false;
-			// 
-			// art3
-			// 
-			this.art3.Location = new System.Drawing.Point(300, 24);
-			this.art3.Name = "art3";
-			this.art3.Size = new System.Drawing.Size(135, 134);
-			this.art3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art3.TabIndex = 16;
-			this.art3.TabStop = false;
-			// 
-			// art2
-			// 
-			this.art2.Location = new System.Drawing.Point(159, 24);
-			this.art2.Name = "art2";
-			this.art2.Size = new System.Drawing.Size(135, 134);
-			this.art2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art2.TabIndex = 14;
-			this.art2.TabStop = false;
-			// 
-			// label7
-			// 
-			this.label7.AutoSize = true;
-			this.label7.Location = new System.Drawing.Point(153, 321);
-			this.label7.Name = "label7";
-			this.label7.Size = new System.Drawing.Size(0, 18);
-			this.label7.TabIndex = 5;
-			// 
-			// art1
-			// 
-			this.art1.Location = new System.Drawing.Point(18, 24);
-			this.art1.Name = "art1";
-			this.art1.Size = new System.Drawing.Size(135, 134);
-			this.art1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-			this.art1.TabIndex = 1;
-			this.art1.TabStop = false;
 			// 
 			// panel2
 			// 
@@ -595,7 +236,7 @@
 			this.panel3.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.panel3.Location = new System.Drawing.Point(258, -2);
 			this.panel3.Name = "panel3";
-			this.panel3.Size = new System.Drawing.Size(1035, 50);
+			this.panel3.Size = new System.Drawing.Size(1034, 50);
 			this.panel3.TabIndex = 5;
 			// 
 			// TrackDuration
@@ -635,7 +276,7 @@
 			this.PrevButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.PrevButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.PrevButton.Image = global::Claudia.Properties.Resources.prev;
-			this.PrevButton.Location = new System.Drawing.Point(909, 8);
+			this.PrevButton.Location = new System.Drawing.Point(902, 8);
 			this.PrevButton.Name = "PrevButton";
 			this.PrevButton.Size = new System.Drawing.Size(35, 35);
 			this.PrevButton.TabIndex = 16;
@@ -648,7 +289,7 @@
 			this.PlayButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.PlayButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.PlayButton.Image = global::Claudia.Properties.Resources.play;
-			this.PlayButton.Location = new System.Drawing.Point(949, 8);
+			this.PlayButton.Location = new System.Drawing.Point(942, 8);
 			this.PlayButton.Name = "PlayButton";
 			this.PlayButton.Size = new System.Drawing.Size(35, 35);
 			this.PlayButton.TabIndex = 10;
@@ -661,7 +302,7 @@
 			this.NextButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.NextButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
 			this.NextButton.Image = global::Claudia.Properties.Resources.next;
-			this.NextButton.Location = new System.Drawing.Point(990, 8);
+			this.NextButton.Location = new System.Drawing.Point(983, 8);
 			this.NextButton.Name = "NextButton";
 			this.NextButton.Size = new System.Drawing.Size(35, 35);
 			this.NextButton.TabIndex = 12;
@@ -692,12 +333,12 @@
 			// 
 			// statusStrip1
 			// 
-			this.statusStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.statusStrip1.BackColor = System.Drawing.Color.CadetBlue;
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLbl});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 660);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 657);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(1290, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(1292, 22);
 			this.statusStrip1.TabIndex = 6;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -708,54 +349,32 @@
 			this.statusLbl.Size = new System.Drawing.Size(39, 17);
 			this.statusLbl.Text = "Ready";
 			// 
+			// artPanel
+			// 
+			this.artPanel.AutoScroll = true;
+			this.artPanel.Location = new System.Drawing.Point(270, 60);
+			this.artPanel.Name = "artPanel";
+			this.artPanel.Size = new System.Drawing.Size(1008, 589);
+			this.artPanel.TabIndex = 7;
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.AutoSize = true;
-			this.ClientSize = new System.Drawing.Size(1290, 682);
+			this.ClientSize = new System.Drawing.Size(1292, 679);
+			this.Controls.Add(this.artPanel);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.panel3);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.Home);
-			this.Controls.Add(this.groupBox2);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
-			this.Text = "Claudia β";
+			this.Text = "Claudia";
 			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			this.Load += new System.EventHandler(this.MainForm_Load);
 			this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
-			this.groupBox2.ResumeLayout(false);
-			this.groupBox2.PerformLayout();
-			((System.ComponentModel.ISupportInitialize)(this.art22)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art23)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art24)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art25)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art26)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art27)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art28)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art15)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art16)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art17)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art18)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art19)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art20)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art21)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art8)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art9)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art10)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art11)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art12)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art13)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art14)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art7)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art4)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art5)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art6)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art3)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art2)).EndInit();
-			((System.ComponentModel.ISupportInitialize)(this.art1)).EndInit();
 			this.panel2.ResumeLayout(false);
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox4.PerformLayout();
@@ -776,9 +395,6 @@
 		}
 
 		#endregion
-		private System.Windows.Forms.PictureBox art1;
-		private System.Windows.Forms.GroupBox groupBox2;
-		private System.Windows.Forms.Label label7;
 		private System.Windows.Forms.Button PlayButton;
 		private System.Windows.Forms.Button NextButton;
 		private System.Windows.Forms.Panel Home;
@@ -789,35 +405,8 @@
 		private System.Windows.Forms.PictureBox NextAlbumArt;
 		private System.Windows.Forms.GroupBox groupBox3;
 		private System.Windows.Forms.Label NextTrack;
-		private System.Windows.Forms.PictureBox art8;
-		private System.Windows.Forms.PictureBox art9;
-		private System.Windows.Forms.PictureBox art10;
-		private System.Windows.Forms.PictureBox art11;
-		private System.Windows.Forms.PictureBox art12;
-		private System.Windows.Forms.PictureBox art13;
-		private System.Windows.Forms.PictureBox art14;
-		private System.Windows.Forms.PictureBox art7;
-		private System.Windows.Forms.PictureBox art4;
-		private System.Windows.Forms.PictureBox art5;
-		private System.Windows.Forms.PictureBox art6;
-		private System.Windows.Forms.PictureBox art3;
-		private System.Windows.Forms.PictureBox art2;
-		private System.Windows.Forms.PictureBox art15;
-		private System.Windows.Forms.PictureBox art16;
-		private System.Windows.Forms.PictureBox art17;
-		private System.Windows.Forms.PictureBox art18;
-		private System.Windows.Forms.PictureBox art19;
-		private System.Windows.Forms.PictureBox art20;
-		private System.Windows.Forms.PictureBox art21;
 		private System.Windows.Forms.Button PrevButton;
 		private System.Windows.Forms.Panel panel3;
-		private System.Windows.Forms.PictureBox art22;
-		private System.Windows.Forms.PictureBox art23;
-		private System.Windows.Forms.PictureBox art24;
-		private System.Windows.Forms.PictureBox art25;
-		private System.Windows.Forms.PictureBox art26;
-		private System.Windows.Forms.PictureBox art27;
-		private System.Windows.Forms.PictureBox art28;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.Label SelectTrack;
 		private System.Windows.Forms.PictureBox SelectArt;
@@ -829,5 +418,6 @@
 		private System.Windows.Forms.Button LoginButton;
 		private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer;
 		private System.Windows.Forms.Button PlayerButton;
+		private System.Windows.Forms.FlowLayoutPanel artPanel;
 	}
 }

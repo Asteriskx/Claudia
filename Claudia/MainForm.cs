@@ -7,10 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
-using System.Reflection;
 using WMPLib;
+using System.Net;
+using System.IO;
 
 namespace Claudia
 {
@@ -20,6 +22,21 @@ namespace Claudia
 	public partial class MainForm : Form
 	{
 		#region Properties
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private AimpProperties _Properties { get; set; } = new AimpProperties();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private AimpCommands _Commands { get; set; } = new AimpCommands();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private WindowsMediaPlayer _WMP { get; set; } = new WindowsMediaPlayer();
 
 		/// <summary>
 		/// 
@@ -71,26 +88,6 @@ namespace Claudia
 		/// </summary>
 		private bool _IsMusicBeeChecked { get; set; } = false;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private static readonly int _ArtworkNum = 28;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private AimpProperties _Properties { get; set; } = new AimpProperties();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private AimpCommands _Commands { get; set; } = new AimpCommands();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private WindowsMediaPlayer _WMP { get; set; } = new WindowsMediaPlayer();
-
 		#endregion Properties
 
 		#region Constructor
@@ -109,12 +106,14 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void MainForm_Load(object sender, EventArgs e)
+		private async void MainForm_Load(object sender, EventArgs e)
 		{
-			foreach (var i in Enumerable.Range(0, _ArtworkNum))
+			var player = new SelectPlayerForm(this._IsAIMP4Checked, this._IsWMPChecked, this._IsMusicBeeChecked);
+			if (player.ShowDialog() == DialogResult.OK)
 			{
-				var artwork = (PictureBox)_FindControlByFieldName(this, $"art{i + 1}");
-				artwork.Click += (s, v) => this._ArtworkLists(i);
+				this._IsAIMP4Checked = player.IsAIMP4Checked;
+				this._IsWMPChecked = player.IsWMPChecked;
+				this._IsMusicBeeChecked = player.IsMusicBeeChecked;
 			}
 
 			var settings = Properties.Settings.Default;
@@ -130,6 +129,9 @@ namespace Claudia
 				this.LoginButton.Enabled = false;
 				this._SCUsers = new SCUsers(this._Token, this._ClientId, HttpMethod.Get);
 			}
+
+			await this.GetFavoriteSongsListAsync();
+			await this._CreateArtworksAsync();
 		}
 
 		/// <summary>
@@ -142,7 +144,12 @@ namespace Claudia
 			if (this.WindowState == FormWindowState.Minimized)
 			{
 				var track = this._Likes[this._Count];
-				new MiniWindow(track.ArtworkUrl, track.Title, track.User.UserName, this.GetCurrentTrackDuration(track.Duration)).Show();
+				var artUrl = track.ArtworkUrl;
+				var title = track.Title;
+				var artist = track.User.UserName;
+				var duration = this.GetCurrentTrackDuration(track.Duration);
+
+				new MiniForm(this, artUrl, title, artist, duration).Show();
 			}
 		}
 
@@ -224,14 +231,12 @@ namespace Claudia
 		/// <param name="e"></param>
 		private async void LikesButton_Click(object sender, EventArgs e)
 		{
-			await this.GetFavoriteSongsListAsync();
-			await this.DefaultViewAlbumListAsync(_ArtworkNum);
+			await this.DefaultViewAlbumListAsync(this._Likes.Count);
 
 			var track = this._Likes[this._Count];
 			var nextTrack = this._Likes[this._Count + 1];
 
-			this.art1.ImageLocation = track.ArtworkUrl ?? string.Empty;
-			this.NextAlbumArt.ImageLocation = nextTrack.ArtworkUrl ?? string.Empty;
+			this.NextAlbumArt.Image = this._LoadImageFromUrl(nextTrack.ArtworkUrl) ?? Properties.Resources.none;
 			this.NextTrack.Text = nextTrack.Title;
 
 			var data = this._Likes.Where(x => x.StreamUrl != null).ToArray();
@@ -254,7 +259,7 @@ namespace Claudia
 				var track = this._Likes[this._Count];
 				this._IsPlay = true;
 
-				this.barArt.ImageLocation = track.ArtworkUrl ?? string.Empty;
+				this.barArt.Image = this._LoadImageFromUrl(track.ArtworkUrl) ?? Properties.Resources.none;
 				this.barTrackInfo.Text = $"{track.Title} - {track.User.UserName}";
 				this.TrackDuration.Text = this.GetCurrentTrackDuration(track.Duration);
 				this.PlayButton.Image = Properties.Resources.pause;
@@ -303,25 +308,14 @@ namespace Claudia
 		/// <returns></returns>
 		private async Task DefaultViewAlbumListAsync(int count)
 		{
-			foreach (var i in Enumerable.Range(0, count))
+			await Task.Run(() =>
 			{
-				var artwork = (PictureBox)_FindControlByFieldName(this, $"art{i + 1}");
-				artwork.ImageLocation = this._Likes[i].ArtworkUrl ?? string.Empty;
-			}
-		}
-
-		/// <summary>
-		/// フォームに配置されているコントロールを名前で検索します
-		/// </summary>
-		/// <param name="form">コントロールを探すフォーム</param>
-		/// <param name="name">コントロール（フィールド）の名前</param>
-		/// <returns>見つかった時は、コントロールのオブジェクト。
-		/// 見つからなかった時は、null </returns>
-		private static object _FindControlByFieldName(Form form, string name)
-		{
-			Type t = form.GetType();
-			FieldInfo fi = t.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-			return fi?.GetValue(form);
+				foreach (var i in Enumerable.Range(0, count))
+				{
+					var artwork = (PictureBox)this.artPanel.Controls[$"art{i + 1}"];
+					artwork.Image = this._LoadImageFromUrl(this._Likes[i].ArtworkUrl) ?? Properties.Resources.none;
+				}
+			});
 		}
 
 		/// <summary>
@@ -347,6 +341,34 @@ namespace Claudia
 		/// <summary>
 		/// 
 		/// </summary>
+		/// <returns></returns>
+		private async Task _CreateArtworksAsync()
+		{
+			this.Invoke((MethodInvoker)(() =>
+			{
+				foreach (var i in Enumerable.Range(0, this._Likes.Count))
+				{
+					var pictureBox = new PictureBox
+					{
+						Name = $"art{i + 1}",
+						Size = new Size(135, 134),
+						SizeMode = PictureBoxSizeMode.Zoom,
+					};
+
+					pictureBox.Click += (s, ev) =>
+					{
+						this._ArtworkLists(i);
+						this._Count = i;
+					};
+
+					this.artPanel.Controls.Add(pictureBox);
+				}
+			}));
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <param name="position"></param>
 		private void _ArtworkLists(int position)
 		{
@@ -354,7 +376,7 @@ namespace Claudia
 			this.SelectArt.ImageLocation = track.ArtworkUrl ?? string.Empty;
 			this.SelectTrack.Text = track.Title;
 
-			this.barArt.ImageLocation = track.ArtworkUrl ?? string.Empty;
+			this.barArt.Image = this._LoadImageFromUrl(track.ArtworkUrl) ?? Properties.Resources.none;
 			this.barTrackInfo.Text = $"{track.Title} - {track.User.UserName}";
 			this.TrackDuration.Text = this.GetCurrentTrackDuration(track.Duration);
 
@@ -368,7 +390,7 @@ namespace Claudia
 		private void _NextTrackInfo(int position)
 		{
 			var nextTrack = this._Likes[position + 1];
-			this.NextAlbumArt.ImageLocation = nextTrack.ArtworkUrl ?? string.Empty;
+			this.NextAlbumArt.Image = this._LoadImageFromUrl(nextTrack.ArtworkUrl) ?? Properties.Resources.none;
 			this.NextTrack.Text = nextTrack.Title;
 		}
 
@@ -425,6 +447,34 @@ namespace Claudia
 			var min = totalSec / 60;
 			var sec = totalSec % 60;
 			return $"{min:D2}:{sec:D2}";
+		}
+
+		/// <summary>
+		/// 指定された URL 画像を Image として取得します。
+		/// </summary>
+		/// <param name="url">画像データのURL</param>
+		/// <returns>画像データ</returns>
+		private Image _LoadImageFromUrl(string url)
+		{
+			using (var ms = new MemoryStream())
+			{
+				if (url == null || url.Trim().Length <= 0) return null;
+
+				var req = WebRequest.Create(url);
+				var reader = new BinaryReader(req.GetResponse().GetResponseStream());
+
+				for (;;)
+				{
+					var buff = new byte[0xFF];
+					var readBytes = reader.Read(buff, 0, 0xFF);
+
+					if (readBytes <= 0) break;
+
+					ms.Write(buff, 0, readBytes);
+				}
+
+				return new Bitmap(ms);
+			}
 		}
 
 		#endregion Private Methods
