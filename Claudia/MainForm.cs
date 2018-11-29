@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Reflection;
+using WMPLib;
 
 namespace Claudia
 {
@@ -56,12 +57,23 @@ namespace Claudia
 		private bool _IsPlay { get; set; } = false;
 
 		/// <summary>
+		/// AIMP4
+		/// </summary>
+		private bool _IsAIMP4Checked { get; set; } = false;
+
+		/// <summary>
+		/// Windows Media Player
+		/// </summary>
+		private bool _IsWMPChecked { get; set; } = false;
+
+		/// <summary>
+		/// MusicBee
+		/// </summary>
+		private bool _IsMusicBeeChecked { get; set; } = false;
+
+		/// <summary>
 		/// 
 		/// </summary>
-		private enum State { Idle = 0, Playing, PlayPause, Stop }
-		private State _NowState = State.Idle;
-		private State _OldState = State.Idle;
-
 		private static readonly int _ArtworkNum = 28;
 
 		/// <summary>
@@ -73,6 +85,11 @@ namespace Claudia
 		/// 
 		/// </summary>
 		private AimpCommands _Commands { get; set; } = new AimpCommands();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private WindowsMediaPlayer _WMP { get; set; } = new WindowsMediaPlayer();
 
 		#endregion Properties
 
@@ -94,9 +111,9 @@ namespace Claudia
 		/// <param name="e"></param>
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			foreach (var i in Enumerable.Range(1, _ArtworkNum))
+			foreach (var i in Enumerable.Range(0, _ArtworkNum))
 			{
-				var artwork = (PictureBox)_FindControlByFieldName(this, $"art{i}");
+				var artwork = (PictureBox)_FindControlByFieldName(this, $"art{i + 1}");
 				artwork.Click += (s, v) => this._ArtworkLists(i);
 			}
 
@@ -113,6 +130,31 @@ namespace Claudia
 				this.LoginButton.Enabled = false;
 				this._SCUsers = new SCUsers(this._Token, this._ClientId, HttpMethod.Get);
 			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void MainForm_SizeChanged(object sender, EventArgs e)
+		{
+			if (this.WindowState == FormWindowState.Minimized)
+			{
+				var track = this._Likes[this._Count];
+				new MiniWindow(track.ArtworkUrl, track.Title, track.User.UserName, this.GetCurrentTrackDuration(track.Duration)).Show();
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			this._Commands.Close();
+			this._WMP.close();
 		}
 
 		/// <summary>
@@ -145,6 +187,41 @@ namespace Claudia
 			}
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void PlayerButton_Click(object sender, EventArgs e)
+		{
+			// CurrentTrack Pausing...
+			if (this._IsAIMP4Checked)
+			{
+				this._Commands.PlayPause();
+			}
+			else if (this._IsWMPChecked)
+			{
+				this._WMP.controls.pause();
+			}
+			else
+			{
+				// TODO : MusicBee
+			}
+
+			var player = new SelectPlayerForm(this._IsAIMP4Checked, this._IsWMPChecked, this._IsMusicBeeChecked);
+			if (player.ShowDialog() == DialogResult.OK)
+			{
+				this._IsAIMP4Checked = player.IsAIMP4Checked;
+				this._IsWMPChecked = player.IsWMPChecked;
+				this._IsMusicBeeChecked = player.IsMusicBeeChecked;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private async void LikesButton_Click(object sender, EventArgs e)
 		{
 			await this.GetFavoriteSongsListAsync();
@@ -175,8 +252,6 @@ namespace Claudia
 			if (!this._IsPlay)
 			{
 				var track = this._Likes[this._Count];
-
-				this._NowState = State.Playing;
 				this._IsPlay = true;
 
 				this.barArt.ImageLocation = track.ArtworkUrl ?? string.Empty;
@@ -188,8 +263,7 @@ namespace Claudia
 			}
 			else
 			{
-				this._NowState = State.PlayPause;
-				this._Commands.PlayPause();
+				this._PauseStreaming();
 				this.PlayButton.Image = Properties.Resources.play;
 				this._IsPlay = false;
 			}
@@ -229,9 +303,9 @@ namespace Claudia
 		/// <returns></returns>
 		private async Task DefaultViewAlbumListAsync(int count)
 		{
-			foreach (var i in Enumerable.Range(1, count))
+			foreach (var i in Enumerable.Range(0, count))
 			{
-				var artwork = (PictureBox)_FindControlByFieldName(this, $"art{i}");
+				var artwork = (PictureBox)_FindControlByFieldName(this, $"art{i + 1}");
 				artwork.ImageLocation = this._Likes[i].ArtworkUrl ?? string.Empty;
 			}
 		}
@@ -239,7 +313,7 @@ namespace Claudia
 		/// <summary>
 		/// フォームに配置されているコントロールを名前で検索します
 		/// </summary>
-		/// <param name="frm">コントロールを探すフォーム</param>
+		/// <param name="form">コントロールを探すフォーム</param>
 		/// <param name="name">コントロール（フィールド）の名前</param>
 		/// <returns>見つかった時は、コントロールのオブジェクト。
 		/// 見つからなかった時は、null </returns>
@@ -287,6 +361,10 @@ namespace Claudia
 			this._StartStreaming(track);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="position"></param>
 		private void _NextTrackInfo(int position)
 		{
 			var nextTrack = this._Likes[position + 1];
@@ -294,10 +372,46 @@ namespace Claudia
 			this.NextTrack.Text = nextTrack.Title;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="track"></param>
 		private void _StartStreaming(SCFavoriteObjects track)
 		{
-			Process.Start(_Properties.AimpProcessPath, $"{track.Uri}/stream?client_id={this._ClientId}");
+			if (this._IsAIMP4Checked)
+			{
+				Process.Start(_Properties.AimpProcessPath, $"{track.Uri}/stream?client_id={this._ClientId}");
+			}
+			else if (this._IsWMPChecked)
+			{
+				this._WMP.URL = $"{track.Uri}/stream?client_id={this._ClientId}";
+				this._WMP.controls.play();
+			}
+			else
+			{
+				// TODO : MusicBee
+			}
+
 			Console.WriteLine($"play is = {track.Title} - {track.Uri}/stream?client_id={this._ClientId}");
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void _PauseStreaming()
+		{
+			if (this._IsAIMP4Checked)
+			{
+				this._Commands.PlayPause();
+			}
+			else if (this._IsWMPChecked)
+			{
+				this._WMP.controls.pause();
+			}
+			else
+			{
+				// TODO : MusicBee
+			}
 		}
 
 		/// <summary>

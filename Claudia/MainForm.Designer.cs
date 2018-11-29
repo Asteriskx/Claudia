@@ -60,6 +60,7 @@
 			this.label7 = new System.Windows.Forms.Label();
 			this.art1 = new System.Windows.Forms.PictureBox();
 			this.panel2 = new System.Windows.Forms.Panel();
+			this.PlayerButton = new System.Windows.Forms.Button();
 			this.LoginButton = new System.Windows.Forms.Button();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.SelectTrack = new System.Windows.Forms.Label();
@@ -78,6 +79,7 @@
 			this.PlayButton = new System.Windows.Forms.Button();
 			this.NextButton = new System.Windows.Forms.Button();
 			this.Home = new System.Windows.Forms.Panel();
+			this.axWindowsMediaPlayer = new AxWMPLib.AxWindowsMediaPlayer();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.statusLbl = new System.Windows.Forms.ToolStripStatusLabel();
 			this.groupBox2.SuspendLayout();
@@ -116,6 +118,8 @@
 			((System.ComponentModel.ISupportInitialize)(this.NextAlbumArt)).BeginInit();
 			this.panel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.barArt)).BeginInit();
+			this.Home.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer)).BeginInit();
 			this.statusStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
@@ -423,6 +427,7 @@
 			// panel2
 			// 
 			this.panel2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.panel2.Controls.Add(this.PlayerButton);
 			this.panel2.Controls.Add(this.LoginButton);
 			this.panel2.Controls.Add(this.groupBox4);
 			this.panel2.Controls.Add(this.groupBox3);
@@ -434,6 +439,22 @@
 			this.panel2.Size = new System.Drawing.Size(257, 610);
 			this.panel2.TabIndex = 5;
 			// 
+			// PlayerButton
+			// 
+			this.PlayerButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.PlayerButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+			this.PlayerButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
+			this.PlayerButton.ForeColor = System.Drawing.Color.White;
+			this.PlayerButton.Image = global::Claudia.Properties.Resources.player;
+			this.PlayerButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.PlayerButton.Location = new System.Drawing.Point(0, 39);
+			this.PlayerButton.Name = "PlayerButton";
+			this.PlayerButton.Size = new System.Drawing.Size(257, 40);
+			this.PlayerButton.TabIndex = 18;
+			this.PlayerButton.Text = "SelectPlayer";
+			this.PlayerButton.UseVisualStyleBackColor = false;
+			this.PlayerButton.Click += new System.EventHandler(this.PlayerButton_Click);
+			// 
 			// LoginButton
 			// 
 			this.LoginButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
@@ -444,7 +465,7 @@
 			this.LoginButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
 			this.LoginButton.Location = new System.Drawing.Point(0, 0);
 			this.LoginButton.Name = "LoginButton";
-			this.LoginButton.Size = new System.Drawing.Size(257, 48);
+			this.LoginButton.Size = new System.Drawing.Size(257, 40);
 			this.LoginButton.TabIndex = 17;
 			this.LoginButton.Text = "Login";
 			this.LoginButton.UseVisualStyleBackColor = false;
@@ -524,9 +545,9 @@
 			this.LikesButton.ForeColor = System.Drawing.Color.White;
 			this.LikesButton.Image = global::Claudia.Properties.Resources.fav;
 			this.LikesButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.LikesButton.Location = new System.Drawing.Point(0, 141);
+			this.LikesButton.Location = new System.Drawing.Point(0, 156);
 			this.LikesButton.Name = "LikesButton";
-			this.LikesButton.Size = new System.Drawing.Size(257, 48);
+			this.LikesButton.Size = new System.Drawing.Size(257, 40);
 			this.LikesButton.TabIndex = 2;
 			this.LikesButton.Text = "Likes";
 			this.LikesButton.UseVisualStyleBackColor = false;
@@ -540,9 +561,9 @@
 			this.PlayListsButton.ForeColor = System.Drawing.Color.White;
 			this.PlayListsButton.Image = global::Claudia.Properties.Resources.playlist;
 			this.PlayListsButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.PlayListsButton.Location = new System.Drawing.Point(0, 94);
+			this.PlayListsButton.Location = new System.Drawing.Point(0, 117);
 			this.PlayListsButton.Name = "PlayListsButton";
-			this.PlayListsButton.Size = new System.Drawing.Size(257, 48);
+			this.PlayListsButton.Size = new System.Drawing.Size(257, 40);
 			this.PlayListsButton.TabIndex = 1;
 			this.PlayListsButton.Text = "PlayLists";
 			this.PlayListsButton.UseVisualStyleBackColor = false;
@@ -555,9 +576,9 @@
 			this.StreamButton.ForeColor = System.Drawing.Color.White;
 			this.StreamButton.Image = global::Claudia.Properties.Resources.stream;
 			this.StreamButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.StreamButton.Location = new System.Drawing.Point(0, 47);
+			this.StreamButton.Location = new System.Drawing.Point(0, 78);
 			this.StreamButton.Name = "StreamButton";
-			this.StreamButton.Size = new System.Drawing.Size(257, 48);
+			this.StreamButton.Size = new System.Drawing.Size(257, 40);
 			this.StreamButton.TabIndex = 0;
 			this.StreamButton.Text = "Stream";
 			this.StreamButton.UseVisualStyleBackColor = false;
@@ -652,11 +673,22 @@
 			this.Home.BackColor = System.Drawing.Color.Tomato;
 			this.Home.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("Home.BackgroundImage")));
 			this.Home.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+			this.Home.Controls.Add(this.axWindowsMediaPlayer);
 			this.Home.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
 			this.Home.Location = new System.Drawing.Point(1, -2);
 			this.Home.Name = "Home";
 			this.Home.Size = new System.Drawing.Size(257, 50);
 			this.Home.TabIndex = 4;
+			// 
+			// axWindowsMediaPlayer
+			// 
+			this.axWindowsMediaPlayer.Enabled = true;
+			this.axWindowsMediaPlayer.Location = new System.Drawing.Point(11, 16);
+			this.axWindowsMediaPlayer.Name = "axWindowsMediaPlayer";
+			this.axWindowsMediaPlayer.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWindowsMediaPlayer.OcxState")));
+			this.axWindowsMediaPlayer.Size = new System.Drawing.Size(75, 23);
+			this.axWindowsMediaPlayer.TabIndex = 7;
+			this.axWindowsMediaPlayer.Visible = false;
 			// 
 			// statusStrip1
 			// 
@@ -665,7 +697,7 @@
             this.statusLbl});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 660);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(1293, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(1290, 22);
 			this.statusStrip1.TabIndex = 6;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -680,16 +712,20 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(1293, 682);
+			this.AutoSize = true;
+			this.ClientSize = new System.Drawing.Size(1290, 682);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.panel3);
 			this.Controls.Add(this.panel2);
 			this.Controls.Add(this.Home);
 			this.Controls.Add(this.groupBox2);
+			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
 			this.Name = "MainForm";
 			this.Text = "Claudia β";
+			this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
 			this.Load += new System.EventHandler(this.MainForm_Load);
+			this.SizeChanged += new System.EventHandler(this.MainForm_SizeChanged);
 			this.groupBox2.ResumeLayout(false);
 			this.groupBox2.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.art22)).EndInit();
@@ -730,6 +766,8 @@
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.barArt)).EndInit();
+			this.Home.ResumeLayout(false);
+			((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer)).EndInit();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
 			this.ResumeLayout(false);
@@ -789,5 +827,7 @@
 		private System.Windows.Forms.ToolStripStatusLabel statusLbl;
 		private System.Windows.Forms.Label TrackDuration;
 		private System.Windows.Forms.Button LoginButton;
+		private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer;
+		private System.Windows.Forms.Button PlayerButton;
 	}
 }
