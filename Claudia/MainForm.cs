@@ -1,18 +1,14 @@
 ﻿using Claudia.SoundCloud.EndPoints;
-using Claudia.SoundCloud.EndPoints.Users;
-using Newtonsoft.Json;
+using Claudia.Utility;
 using Legato;
 using System;
-using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using System.Drawing;
 using System.Windows.Forms;
-using System.Diagnostics;
 using WMPLib;
-using System.Net;
-using System.IO;
 
 namespace Claudia
 {
@@ -27,65 +23,22 @@ namespace Claudia
 		/// 
 		/// </summary>
 		private AimpProperties _Properties { get; set; } = new AimpProperties();
-
-		/// <summary>
-		/// 
-		/// </summary>
 		private AimpCommands _Commands { get; set; } = new AimpCommands();
-
-		/// <summary>
-		/// 
-		/// </summary>
 		private WindowsMediaPlayer _WMP { get; set; } = new WindowsMediaPlayer();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private HttpClient _Client { get; set; } = new HttpClient();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<SCFavoriteObjects> _Likes { get; set; } = new List<SCFavoriteObjects>();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private SCUsers _SCUsers { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private string _ClientId { get; set; } = string.Empty;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private string _Token { get; set; } = string.Empty;
+		private SoundCloud.SoundCloud _SoundCloud { get; set; }
 
 		/// <summary>
 		/// 
 		/// </summary>
 		private int _Count { get; set; } = 0;
+		private bool _IsPlay { get; set; } = false;
+		private System.Timers.Timer _Timer { get; set; } = new System.Timers.Timer(1000);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private bool _IsPlay { get; set; } = false;
-
-		/// <summary>
-		/// AIMP4
-		/// </summary>
 		private bool _IsAIMP4Checked { get; set; } = false;
-
-		/// <summary>
-		/// Windows Media Player
-		/// </summary>
 		private bool _IsWMPChecked { get; set; } = false;
-
-		/// <summary>
-		/// MusicBee
-		/// </summary>
 		private bool _IsMusicBeeChecked { get; set; } = false;
 
 		#endregion Properties
@@ -106,7 +59,7 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private async void MainForm_Load(object sender, EventArgs e)
+		private void MainForm_Load(object sender, EventArgs e)
 		{
 			var player = new SelectPlayerForm(this._IsAIMP4Checked, this._IsWMPChecked, this._IsMusicBeeChecked);
 			if (player.ShowDialog() == DialogResult.OK)
@@ -122,16 +75,10 @@ namespace Claudia
 
 			if (!string.IsNullOrEmpty(clientId) && !string.IsNullOrEmpty(token))
 			{
-				this._ClientId = (string)settings["ClientId"];
-				this._Token = (string)settings["Token"];
-
 				this.statusLbl.Text = $"Login: No - Token: Acquired...";
 				this.LoginButton.Enabled = false;
-				this._SCUsers = new SCUsers(this._Token, this._ClientId, HttpMethod.Get);
+				this._SoundCloud = new SoundCloud.SoundCloud(token, clientId, HttpMethod.Get);
 			}
-
-			await this.GetFavoriteSongsListAsync();
-			await this._CreateArtworksAsync();
 		}
 
 		/// <summary>
@@ -143,11 +90,11 @@ namespace Claudia
 		{
 			if (this.WindowState == FormWindowState.Minimized)
 			{
-				var track = this._Likes[this._Count];
+				var track = this._SoundCloud.Likes[this._Count];
 				var artUrl = track.ArtworkUrl;
 				var title = track.Title;
 				var artist = track.User.UserName;
-				var duration = this.GetCurrentTrackDuration(track.Duration);
+				var duration = Common.GetCurrentTrackPosition(track.Duration);
 
 				new MiniForm(this, artUrl, title, artist, duration).Show();
 			}
@@ -160,7 +107,7 @@ namespace Claudia
 		/// <param name="e"></param>
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			this._Commands.Close();
+			if (this._Properties.IsRunning) this._Commands.Close();
 			this._WMP.close();
 		}
 
@@ -180,16 +127,13 @@ namespace Claudia
 				var form = new LoginForm();
 				if (form.ShowDialog() == DialogResult.OK)
 				{
-					this._ClientId = form.ClientId;
-					this._Token = form.Token;
-
-					settings["ClientId"] = this._ClientId;
-					settings["Token"] = this._Token;
+					settings["ClientId"] = form.ClientId;
+					settings["Token"] = form.Token;
 					settings.Save();
 
 					this.LoginButton.Enabled = false;
 					this.statusLbl.Text = $"Login: Yes - Token: Acquired...";
-					this._SCUsers = new SCUsers(this._Token, this._ClientId, HttpMethod.Get);
+					this._SoundCloud = new SoundCloud.SoundCloud(form.Token, form.ClientId, HttpMethod.Get);
 				}
 			}
 		}
@@ -229,21 +173,43 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		private void StreamButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
+		private void PlayListsButton_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private async void LikesButton_Click(object sender, EventArgs e)
 		{
-			await this.DefaultViewAlbumListAsync(this._Likes.Count);
+			await this._SoundCloud.GetFavoriteSongsListAsync();
+			await this._CreateArtworksAsync();
+			await this._DefaultViewAlbumListAsync(this._SoundCloud.Likes.Count);
 
-			var track = this._Likes[this._Count];
-			var nextTrack = this._Likes[this._Count + 1];
+			var track = this._SoundCloud.Likes[this._Count];
+			var nextTrack = this._SoundCloud.Likes[this._Count + 1];
 
-			this.NextAlbumArt.Image = this._LoadImageFromUrl(nextTrack.ArtworkUrl) ?? Properties.Resources.none;
+			this.NextAlbumArt.Image = Common.LoadImageFromUrl(nextTrack.ArtworkUrl) ?? Properties.Resources.none;
 			this.NextTrack.Text = nextTrack.Title;
 
-			var data = this._Likes.Where(x => x.StreamUrl != null).ToArray();
-			foreach (var item in data.Select((value, idx) => new { value, idx }))
+			var data = this._SoundCloud.Likes.Where(x => x.StreamUrl != null).ToArray();
+			for (int i = 0; i < data.Length; i++)
 			{
-				var url = $"{item.value.StreamUrl}?client_id={this._ClientId}";
-				Console.WriteLine($"TrackInfo[{item.idx}] : {item.value.Title} - {url}");
+				var url = $"{data[i].StreamUrl}?client_id={this._SoundCloud.ClientId}";
+				Console.WriteLine($"TrackInfo[{i}] : {data[i].Title} - {url}");
 			}
 		}
 
@@ -256,12 +222,12 @@ namespace Claudia
 		{
 			if (!this._IsPlay)
 			{
-				var track = this._Likes[this._Count];
+				var track = this._SoundCloud.Likes[this._Count];
 				this._IsPlay = true;
 
-				this.barArt.Image = this._LoadImageFromUrl(track.ArtworkUrl) ?? Properties.Resources.none;
+				this.barArt.Image = Common.LoadImageFromUrl(track.ArtworkUrl) ?? Properties.Resources.none;
 				this.barTrackInfo.Text = $"{track.Title} - {track.User.UserName}";
-				this.TrackDuration.Text = this.GetCurrentTrackDuration(track.Duration);
+				this.TrackDuration.Text = Common.GetCurrentTrackPosition(track.Duration);
 				this.PlayButton.Image = Properties.Resources.pause;
 
 				this._StartStreaming(track);
@@ -298,6 +264,26 @@ namespace Claudia
 			this._NextTrackInfo(this._Count);
 		}
 
+
+		//private async void Twitter_ButtonClick(object sender, EventArgs e)
+		//{
+		//	var track = this._SoundCloud.Likes[this._Count];
+
+		//	var tw = new StringBuilder();
+		//	tw.Append($"🎵 {track.Title}\r\n");
+		//	tw.Append($"🎙 {track.User.UserName}\r\n");
+		//	tw.Append("💿 Likes\r\n");
+		//	tw.Append("#nowplaying #Claudia");
+
+		//	var image = Common.LoadImageFromUrl(track.ArtworkUrl);
+		//	await this._Twitter.UpdateWithTextAsync(tw.ToString());
+		//}
+
+		private void VolumeBar_Scroll(object sender, EventArgs e)
+		{
+			this._WMP.settings.volume = this.VolumeBar.Value;
+		}
+
 		#endregion Event Methods
 
 		#region Private Methods
@@ -306,36 +292,16 @@ namespace Claudia
 		/// Claudia メイン画面のアルバムアート一覧
 		/// </summary>
 		/// <returns></returns>
-		private async Task DefaultViewAlbumListAsync(int count)
+		private async Task _DefaultViewAlbumListAsync(int count)
 		{
 			await Task.Run(() =>
 			{
-				foreach (var i in Enumerable.Range(0, count))
+				foreach (var i in  Enumerable.Range(0, this._SoundCloud.Likes.Count))
 				{
 					var artwork = (PictureBox)this.artPanel.Controls[$"art{i + 1}"];
-					artwork.Image = this._LoadImageFromUrl(this._Likes[i].ArtworkUrl) ?? Properties.Resources.none;
+					artwork.Image = Common.LoadImageFromUrl(this._SoundCloud.Likes[i].ArtworkUrl) ?? Properties.Resources.none;
 				}
 			});
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
-		private async Task GetFavoriteSongsListAsync()
-		{
-			var connection = this._SCUsers.GetRequestMessage();
-
-			var response = await this._Client.SendAsync(connection);
-
-			var resString = await response.Content.ReadAsStringAsync();
-			resString = resString.Replace("large", "t500x500");
-
-			var pagenation = JsonConvert.DeserializeObject<Pagenation<SCFavoriteObjects>>(resString);
-			this._Likes.AddRange(pagenation.Collection);
-
-			// TODO : 次取得
-			var nextUrl = pagenation.NextHref;
 		}
 
 		/// <summary>
@@ -346,7 +312,7 @@ namespace Claudia
 		{
 			this.Invoke((MethodInvoker)(() =>
 			{
-				foreach (var i in Enumerable.Range(0, this._Likes.Count))
+				foreach (var i in Enumerable.Range(0, this._SoundCloud.Likes.Count))
 				{
 					var pictureBox = new PictureBox
 					{
@@ -372,15 +338,31 @@ namespace Claudia
 		/// <param name="position"></param>
 		private void _ArtworkLists(int position)
 		{
-			var track = this._Likes[position];
+			this._UpdateCurrentPosition();
+
+			var track = this._SoundCloud.Likes[position];
 			this.SelectArt.ImageLocation = track.ArtworkUrl ?? string.Empty;
 			this.SelectTrack.Text = track.Title;
 
-			this.barArt.Image = this._LoadImageFromUrl(track.ArtworkUrl) ?? Properties.Resources.none;
+			this.barArt.Image = Common.LoadImageFromUrl(track.ArtworkUrl) ?? Properties.Resources.none;
 			this.barTrackInfo.Text = $"{track.Title} - {track.User.UserName}";
-			this.TrackDuration.Text = this.GetCurrentTrackDuration(track.Duration);
+			this.TrackDuration.Text = Common.GetCurrentTrackPosition(track.Duration);
 
 			this._StartStreaming(track);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private void _UpdateCurrentPosition()
+		{
+			if (this._WMP != null)
+			{
+				this._Timer.Elapsed += (s, ev) =>
+					this.Invoke((MethodInvoker)(() => this.TrackDuration.Text = this._WMP.controls.currentPositionString));
+			}
+
+			this._Timer.Start();
 		}
 
 		/// <summary>
@@ -389,8 +371,8 @@ namespace Claudia
 		/// <param name="position"></param>
 		private void _NextTrackInfo(int position)
 		{
-			var nextTrack = this._Likes[position + 1];
-			this.NextAlbumArt.Image = this._LoadImageFromUrl(nextTrack.ArtworkUrl) ?? Properties.Resources.none;
+			var nextTrack = this._SoundCloud.Likes[position + 1];
+			this.NextAlbumArt.Image = Common.LoadImageFromUrl(nextTrack.ArtworkUrl) ?? Properties.Resources.none;
 			this.NextTrack.Text = nextTrack.Title;
 		}
 
@@ -402,11 +384,11 @@ namespace Claudia
 		{
 			if (this._IsAIMP4Checked)
 			{
-				Process.Start(_Properties.AimpProcessPath, $"{track.Uri}/stream?client_id={this._ClientId}");
+				Process.Start(_Properties.AimpProcessPath, $"{track.Uri}/stream?client_id={this._SoundCloud.ClientId}");
 			}
 			else if (this._IsWMPChecked)
 			{
-				this._WMP.URL = $"{track.Uri}/stream?client_id={this._ClientId}";
+				this._WMP.URL = $"{track.Uri}/stream?client_id={this._SoundCloud.ClientId}";
 				this._WMP.controls.play();
 			}
 			else
@@ -414,7 +396,7 @@ namespace Claudia
 				// TODO : MusicBee
 			}
 
-			Console.WriteLine($"play is = {track.Title} - {track.Uri}/stream?client_id={this._ClientId}");
+			Console.WriteLine($"play is = {track.Title} - {track.Uri}/stream?client_id={this._SoundCloud.ClientId}");
 		}
 
 		/// <summary>
@@ -433,47 +415,6 @@ namespace Claudia
 			else
 			{
 				// TODO : MusicBee
-			}
-		}
-
-		/// <summary>
-		/// 再生している曲の長さを取得します。
-		/// </summary>
-		/// <param name="position"></param>
-		/// <returns></returns>
-		private string GetCurrentTrackDuration(int position)
-		{
-			var totalSec = position / 1000;
-			var min = totalSec / 60;
-			var sec = totalSec % 60;
-			return $"{min:D2}:{sec:D2}";
-		}
-
-		/// <summary>
-		/// 指定された URL 画像を Image として取得します。
-		/// </summary>
-		/// <param name="url">画像データのURL</param>
-		/// <returns>画像データ</returns>
-		private Image _LoadImageFromUrl(string url)
-		{
-			using (var ms = new MemoryStream())
-			{
-				if (url == null || url.Trim().Length <= 0) return null;
-
-				var req = WebRequest.Create(url);
-				var reader = new BinaryReader(req.GetResponse().GetResponseStream());
-
-				for (;;)
-				{
-					var buff = new byte[0xFF];
-					var readBytes = reader.Read(buff, 0, 0xFF);
-
-					if (readBytes <= 0) break;
-
-					ms.Write(buff, 0, readBytes);
-				}
-
-				return new Bitmap(ms);
 			}
 		}
 

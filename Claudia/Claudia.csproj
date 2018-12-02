@@ -138,6 +138,7 @@
     <Compile Include="SelectPlayerForm.Designer.cs">
       <DependentUpon>SelectPlayerForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="SoundCloud\Credentials.cs" />
     <Compile Include="SoundCloud\EndPoints\Pagenation.cs" />
     <Compile Include="SoundCloud\EndPoints\Users\SCUsers.cs" />
     <Compile Include="SoundCloud\Helper\CliendIdRequestHandler.cs" />
@@ -153,9 +154,11 @@
     <Compile Include="SoundCloud\EndPoints\Users\SCFavoriteObjects.cs" />
     <Compile Include="SoundCloud\EndPoints\EndPoints.cs" />
     <Compile Include="SoundCloud\Helper\ProvideRequest.cs" />
+    <Compile Include="SoundCloud\SoundCloud.cs" />
     <Compile Include="Utility\ColumnHeaderEx.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Utility\Common.cs" />
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -246,6 +249,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icon.ico" />
+    <None Include="Resources\baseline_send_white_18dp.png" />
     <None Include="Resources\None.png" />
     <None Include="Resources\baseline_audiotrack_white_18dp.png" />
     <None Include="Resources\icon.ico" />
@@ -266,7 +270,7 @@
       <Lcid>0</Lcid>
       <WrapperTool>tlbimp</WrapperTool>
       <Isolated>False</Isolated>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <EmbedInteropTypes>False</EmbedInteropTypes>
     </COMReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

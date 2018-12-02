@@ -42,6 +42,7 @@
 			this.PlayListsButton = new System.Windows.Forms.Button();
 			this.StreamButton = new System.Windows.Forms.Button();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.VolumeBar = new System.Windows.Forms.TrackBar();
 			this.TrackDuration = new System.Windows.Forms.Label();
 			this.barTrackInfo = new System.Windows.Forms.Label();
 			this.barArt = new System.Windows.Forms.PictureBox();
@@ -59,6 +60,7 @@
 			this.groupBox3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.NextAlbumArt)).BeginInit();
 			this.panel3.SuspendLayout();
+			((System.ComponentModel.ISupportInitialize)(this.VolumeBar)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.barArt)).BeginInit();
 			this.Home.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer)).BeginInit();
@@ -208,6 +210,7 @@
 			this.PlayListsButton.TabIndex = 1;
 			this.PlayListsButton.Text = "PlayLists";
 			this.PlayListsButton.UseVisualStyleBackColor = false;
+			this.PlayListsButton.Click += new System.EventHandler(this.PlayListsButton_Click);
 			// 
 			// StreamButton
 			// 
@@ -223,10 +226,12 @@
 			this.StreamButton.TabIndex = 0;
 			this.StreamButton.Text = "Stream";
 			this.StreamButton.UseVisualStyleBackColor = false;
+			this.StreamButton.Click += new System.EventHandler(this.StreamButton_Click);
 			// 
 			// panel3
 			// 
 			this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.panel3.Controls.Add(this.VolumeBar);
 			this.panel3.Controls.Add(this.TrackDuration);
 			this.panel3.Controls.Add(this.barTrackInfo);
 			this.panel3.Controls.Add(this.barArt);
@@ -239,11 +244,21 @@
 			this.panel3.Size = new System.Drawing.Size(1034, 50);
 			this.panel3.TabIndex = 5;
 			// 
+			// VolumeBar
+			// 
+			this.VolumeBar.Location = new System.Drawing.Point(792, 16);
+			this.VolumeBar.Maximum = 100;
+			this.VolumeBar.Name = "VolumeBar";
+			this.VolumeBar.Size = new System.Drawing.Size(104, 45);
+			this.VolumeBar.TabIndex = 20;
+			this.VolumeBar.TickStyle = System.Windows.Forms.TickStyle.None;
+			this.VolumeBar.Scroll += new System.EventHandler(this.VolumeBar_Scroll);
+			// 
 			// TrackDuration
 			// 
 			this.TrackDuration.AutoSize = true;
 			this.TrackDuration.ForeColor = System.Drawing.Color.White;
-			this.TrackDuration.Location = new System.Drawing.Point(838, 16);
+			this.TrackDuration.Location = new System.Drawing.Point(753, 16);
 			this.TrackDuration.Name = "TrackDuration";
 			this.TrackDuration.Size = new System.Drawing.Size(33, 18);
 			this.TrackDuration.TabIndex = 19;
@@ -384,6 +399,7 @@
 			((System.ComponentModel.ISupportInitialize)(this.NextAlbumArt)).EndInit();
 			this.panel3.ResumeLayout(false);
 			this.panel3.PerformLayout();
+			((System.ComponentModel.ISupportInitialize)(this.VolumeBar)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.barArt)).EndInit();
 			this.Home.ResumeLayout(false);
 			((System.ComponentModel.ISupportInitialize)(this.axWindowsMediaPlayer)).EndInit();
@@ -419,5 +435,6 @@
 		private AxWMPLib.AxWindowsMediaPlayer axWindowsMediaPlayer;
 		private System.Windows.Forms.Button PlayerButton;
 		private System.Windows.Forms.FlowLayoutPanel artPanel;
+		private System.Windows.Forms.TrackBar VolumeBar;
 	}
 }
