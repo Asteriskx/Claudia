@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Claudia.SoundCloud
 {
+	/// <summary>
+	/// SoundCloud 管理クラス
+	/// </summary>
 	public class SoundCloud : Credentials
 	{
 		#region Properties
@@ -13,14 +16,23 @@ namespace Claudia.SoundCloud
 		private bool _IsNextHref { get; set; } = false;
 		public List<string> NextHrefList { get; private set; } = new List<string>();
 		public List<SCFavoriteObjects> Likes { get; private set; } = new List<SCFavoriteObjects>();
+		public int TrackNum { get; set; } = 0;
 
 		#endregion Properties
 
 		#region Constructor
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="token"></param>
+		/// <param name="clientId"></param>
+		/// <param name="type"></param>
 		public SoundCloud(string token, string clientId, HttpMethod type) : base(token, clientId, type) { }
 
 		#endregion Constructror
+
+		#region Public Methods
 
 		/// <summary>
 		/// 
@@ -75,5 +87,7 @@ namespace Claudia.SoundCloud
 				idx++;
 			}
 		}
+
+		#endregion Public Methods
 	}
 }

@@ -3,6 +3,9 @@ using System.Windows.Forms;
 
 namespace Claudia
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public partial class MiniForm : Form
 	{
 		private MainForm _Parent { get; set; }
@@ -11,6 +14,14 @@ namespace Claudia
 		private string _Artist { get; set; }
 		private string _Duration { get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="parent"></param>
+		/// <param name="artworkUrl"></param>
+		/// <param name="title"></param>
+		/// <param name="artist"></param>
+		/// <param name="duration"></param>
 		public MiniForm(MainForm parent, string artworkUrl, string title, string artist, string duration)
 		{
 			InitializeComponent();
@@ -22,6 +33,11 @@ namespace Claudia
 			this._Duration = duration;
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void MiniWindow_Load(object sender, EventArgs e)
 		{
 			this.SizeChanged += (s, ev) =>

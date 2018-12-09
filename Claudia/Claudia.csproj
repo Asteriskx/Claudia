@@ -120,6 +120,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\ClaudiaException.cs" />
+    <Compile Include="Interop\ClaudiaCommands.cs" />
+    <Compile Include="Interop\ClaudiaObserver.cs" />
+    <Compile Include="Interop\ClaudiaProperties.cs" />
+    <Compile Include="Interop\Commands.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -193,7 +197,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="SoundCloud\EndPoints\Apps\" />

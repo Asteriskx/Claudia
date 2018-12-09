@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace Claudia.Utility
 {
@@ -16,12 +14,22 @@ namespace Claudia.Utility
 		/// </summary>
 		/// <param name="position"></param>
 		/// <returns></returns>
-		public static string GetCurrentTrackPosition(int position)
+		public static string GetCurrentTrackPositionToStr(int position)
 		{
 			var totalSec = position / 1000;
 			var min = totalSec / 60;
 			var sec = totalSec % 60;
 			return $"{min:D2}:{sec:D2}";
+		}
+
+		/// <summary>
+		/// 再生している曲の長さを取得します。
+		/// </summary>
+		/// <param name="position"></param>
+		/// <returns></returns>
+		public static int GetCurrentTrackPositionToInt(int position)
+		{
+			return (position / 1000);
 		}
 
 		/// <summary>
@@ -50,6 +58,19 @@ namespace Claudia.Utility
 
 				return new Bitmap(ms);
 			}
+		}
+
+		/// <summary>
+		/// フォームに配置されているコントロールを名前で検索します。
+		/// </summary>
+		/// <param name="form">コントロールを探すフォーム</param>
+		/// <param name="name">コントロール（フィールド）の名前</param>
+		/// <returns>見つかった時は、コントロールのオブジェクト。見つからなかった時は、null を返却します。</returns>
+		public static object FindControl(Form form, string name)
+		{
+			Type t = form.GetType();
+			FieldInfo info = t.GetField(name, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.DeclaredOnly);
+			return info?.GetValue(form);
 		}
 	}
 }
