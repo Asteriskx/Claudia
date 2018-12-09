@@ -20,7 +20,7 @@ namespace Claudia
 	{
 		#region Properties
 
-		private AimpProperties _Properties { get; set; }
+		private AimpProperties _Properties { get; set; } = new AimpProperties();
 		private AimpCommands _Commands { get; set; } = new AimpCommands();
 		private WindowsMediaPlayer _Wmp { get; set; } = new WindowsMediaPlayer();
 
