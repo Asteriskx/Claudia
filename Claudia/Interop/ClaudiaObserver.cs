@@ -19,8 +19,6 @@ namespace Claudia.Interop
 		/// 
 		/// </summary>
 		private MainForm _Parent { get; set; }
-		private AimpProperties _Properties { get; set; }
-		private AimpCommands _Commands { get; set; }
 		private WindowsMediaPlayer _Wmp { get; set; }
 
 		/// <summary>
@@ -56,11 +54,9 @@ namespace Claudia.Interop
 		/// <summary>
 		/// 
 		/// </summary>
-		public ClaudiaObserver(MainForm parent, AimpProperties aimpProperties, AimpCommands aimpCommands, WindowsMediaPlayer wmp)
+		public ClaudiaObserver(MainForm parent, WindowsMediaPlayer wmp)
 		{
 			this._Parent = parent;
-			this._Properties = aimpProperties;
-			this._Commands = aimpCommands;
 			this._Wmp = wmp;
 		}
 
@@ -145,9 +141,6 @@ namespace Claudia.Interop
 		/// </summary>
 		public void Dispose()
 		{
-			if (this._Properties != null && this._Properties.IsRunning)
-				this._Commands.Close();
-
 			this._UpdateTimer.Dispose();
 			this._PlayTimer.Dispose();
 			this._Wmp.close();

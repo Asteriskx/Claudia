@@ -1,7 +1,5 @@
 ﻿using Claudia.SoundCloud.EndPoints;
-using Legato;
 using System;
-using System.Diagnostics;
 using WMPLib;
 
 namespace Claudia.Interop
@@ -16,11 +14,9 @@ namespace Claudia.Interop
 		/// <summary>
 		/// 
 		/// </summary>
-		private AimpProperties _Properties { get; set; }
-		private AimpCommands _Commands { get; set; }
 		private WindowsMediaPlayer _Wmp { get; set; }
-		private ClaudiaProperties _CProperties { get; set; }
-		private ClaudiaObserver _CObserver { get; set; }
+		private ClaudiaProperties _Properties { get; set; }
+		private ClaudiaObserver _Observer { get; set; }
 
 		#endregion Properties
 
@@ -29,19 +25,14 @@ namespace Claudia.Interop
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="aimpProperty"></param>
-		/// <param name="aimpCommand"></param>
 		/// <param name="wmp"></param>
-		/// <param name="claudiaProperty"></param>
-		/// <param name="claudiaObserver"></param>
-		public ClaudiaCommands(AimpProperties aimpProperty, AimpCommands aimpCommand,
-			WindowsMediaPlayer wmp, ClaudiaProperties claudiaProperty, ClaudiaObserver claudiaObserver)
+		/// <param name="property"></param>
+		/// <param name="observer"></param>
+		public ClaudiaCommands(WindowsMediaPlayer wmp, ClaudiaProperties property, ClaudiaObserver observer)
 		{
-			this._Properties = aimpProperty;
-			this._Commands = aimpCommand;
 			this._Wmp = wmp;
-			this._CProperties = claudiaProperty;
-			this._CObserver = claudiaObserver;
+			this._Properties = property;
+			this._Observer = observer;
 		}
 
 		#endregion Constructor
@@ -62,19 +53,8 @@ namespace Claudia.Interop
 		/// <param name="track"></param>
 		public override void Play(SoundCloud.SoundCloud sc, SCFavoriteObjects track)
 		{
-			if (this._CProperties.IsAIMP4Checked)
-			{
-				Process.Start(this._Properties.AimpProcessPath, $"{track.Uri}/stream?client_id={sc.ClientId}");
-			}
-			else if (this._CProperties.IsWMPChecked)
-			{
-				this._Wmp.URL = $"{track.Uri}/stream?client_id={sc.ClientId}";
-				this._Wmp.controls.play();
-			}
-			else
-			{
-				// TODO : MusicBee
-			}
+			this._Wmp.URL = $"{track.Uri}/stream?client_id={sc.ClientId}";
+			this._Wmp.controls.play();
 
 			Console.WriteLine($"play is = {track.Title} - {track.Uri}/stream?client_id={sc.ClientId}");
 		}
@@ -84,18 +64,7 @@ namespace Claudia.Interop
 		/// </summary>
 		public override void Pause()
 		{
-			if (this._CProperties.IsAIMP4Checked)
-			{
-				this._Commands.PlayPause();
-			}
-			else if (this._CProperties.IsWMPChecked)
-			{
-				this._Wmp.controls.pause();
-			}
-			else
-			{
-				// TODO : MusicBee
-			}
+			this._Wmp.controls.pause();
 		}
 
 		/// <summary>

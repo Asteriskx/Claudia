@@ -8,9 +8,6 @@ Claudia is SoundCloud Wrapper Application. (for me.)
 - Mini Form (Now Playing)  
 ![sample-wip2](sample-wip2.png)
 
-- Select Player Form  
-![sample-wip3](sample-wip3.png)
-
 ## License for Claudia
 MIT License
 
@@ -24,5 +21,4 @@ MIT License
   
 ### Claudia で利用しているライブラリとそのライセンス
 - Newtonsoft.Json : MIT License
-- JsonFx : MIT License
-- Legato : MIT License
+- Twist  : MIT License

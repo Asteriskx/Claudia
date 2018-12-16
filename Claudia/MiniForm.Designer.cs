@@ -57,6 +57,7 @@
 			this.Title.Size = new System.Drawing.Size(34, 18);
 			this.Title.TabIndex = 1;
 			this.Title.Text = "Title";
+			this.Title.UseMnemonic = false;
 			// 
 			// Artist
 			// 
@@ -70,6 +71,7 @@
 			this.Artist.Size = new System.Drawing.Size(40, 18);
 			this.Artist.TabIndex = 2;
 			this.Artist.Text = "Artist";
+			this.Artist.UseMnemonic = false;
 			// 
 			// Duration
 			// 

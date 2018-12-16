@@ -1,5 +1,4 @@
-﻿using Legato;
-using WMPLib;
+﻿using WMPLib;
 
 namespace Claudia.Interop
 {
@@ -15,30 +14,6 @@ namespace Claudia.Interop
 		public bool IsPlaying { get; set; } = false;
 
 		#endregion Common Property
-
-		#region AIMP4 Sides
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private AimpProperties _Properties { get; set; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool IsAIMP4Checked { get; set; } = false;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool IsAIMP4Running { get => (this._Properties.IsRunning) ? true : false; }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public int AimpVolume { set => AimpVolume = value; }
-
-		#endregion AIMP4 Sides
 
 		#region WMP Sides
 
@@ -66,15 +41,6 @@ namespace Claudia.Interop
 
 		#endregion WMP Sides
 
-		#region MusicBee Sides
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool IsMusicBeeChecked { get; set; } = false;
-
-		#endregion MusicBee Sides
-
 		#endregion Properties
 
 		#region Constructor
@@ -84,9 +50,8 @@ namespace Claudia.Interop
 		/// </summary>
 		/// <param name="property"></param>
 		/// <param name="wmp"></param>
-		public ClaudiaProperties(AimpProperties property, WindowsMediaPlayer wmp)
+		public ClaudiaProperties(WindowsMediaPlayer wmp)
 		{
-			this._Properties = property;
 			this._Wmp = wmp;
 		}
 

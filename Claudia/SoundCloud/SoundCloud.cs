@@ -40,6 +40,21 @@ namespace Claudia.SoundCloud
 		/// 
 		/// </summary>
 		/// <returns></returns>
+		public async Task<string> GetProfileUrlAsync()
+		{
+			var connection = this.SCCredentials.GetRequestMessage(RequestType.LoginUser);
+
+			var response = await this.Client.SendAsync(connection);
+
+			var resString = await response.Content.ReadAsStringAsync();
+
+			return JsonConvert.DeserializeObject<SCUser>(resString).PermalinkUrl;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public async Task<string> GetLoginAvaterImageUrlAsync()
 		{
 			var connection = this.SCCredentials.GetRequestMessage(RequestType.LoginUser);

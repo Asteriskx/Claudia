@@ -139,12 +139,6 @@
     <Compile Include="MiniForm.Designer.cs">
       <DependentUpon>MiniForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="SelectPlayerForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="SelectPlayerForm.Designer.cs">
-      <DependentUpon>SelectPlayerForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="SoundCloud\Credentials.cs" />
     <Compile Include="SoundCloud\EndPoints\Pagenation.cs" />
     <Compile Include="SoundCloud\EndPoints\Users\SCCredentials.cs" />
@@ -186,9 +180,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SelectPlayerForm.resx">
-      <DependentUpon>SelectPlayerForm.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
