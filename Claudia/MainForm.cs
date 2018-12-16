@@ -5,8 +5,12 @@ using Legato;
 using System;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Imaging;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WMPLib;
@@ -32,6 +36,22 @@ namespace Claudia
 		private ClaudiaProperties _CProperties { get; set; }
 		private ClaudiaObserver _CObserver { get; set; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private MiniForm _NowPlaying { get; set; }
+
+		#region Twitter
+
+		private static readonly string _ck = "ck";
+		private static readonly string _cs = "cs";
+		private static readonly string _at = "at";
+		private static readonly string _ats = "ats";
+
+		private Twist.Twitter _Twitter { get; set; } = new Twist.Twitter(_ck, _cs, _at, _ats, new HttpClient(new HttpClientHandler()));
+
+		#endregion Twitter
+
 		#endregion Properties
 
 		#region Constructor
@@ -50,7 +70,7 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void MainForm_Load(object sender, EventArgs e)
+		private async void MainForm_Load(object sender, EventArgs e)
 		{
 			this._CProperties = new ClaudiaProperties(this._Properties, this._Wmp);
 			this._CObserver = new ClaudiaObserver(this, this._Properties, this._Commands, this._Wmp);
@@ -62,7 +82,8 @@ namespace Claudia
 
 			this.DoubleBuffered = true;
 			this._Wmp.settings.autoStart = true;
-			this._Wmp.settings.volume = 10;
+			this._Wmp.settings.volume = 20;
+			this.VolumeValue.Text = $"{this._Wmp.settings.volume}%";
 
 			this._GetSelectPlayerProperty();
 
@@ -74,6 +95,10 @@ namespace Claudia
 			{
 				this.LoginButton.Enabled = false;
 				this.SoundCloud = new SoundCloud.SoundCloud(token, clientId, HttpMethod.Get);
+
+				var url = await this.SoundCloud.GetLoginAvaterImageUrlAsync();
+				this.LoginButton.BackgroundImage = Common.LoadImageFromUrl(url);
+				this.LoginButton.Image = null;
 			}
 		}
 
@@ -85,15 +110,7 @@ namespace Claudia
 		private void MainForm_SizeChanged(object sender, EventArgs e)
 		{
 			if (this.WindowState == FormWindowState.Minimized)
-			{
-				var track = this.SoundCloud.Likes[this.SoundCloud.TrackNum];
-				var artUrl = track.ArtworkUrl;
-				var title = track.Title;
-				var artist = track.User.UserName;
-				var duration = Common.GetCurrentTrackPositionToStr(track.Duration);
-
-				new MiniForm(this, artUrl, title, artist, duration).Show();
-			}
+				this._NowPlaying.Show();
 		}
 
 		/// <summary>
@@ -111,7 +128,7 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void LoginButton_Click(object sender, EventArgs e)
+		private async void LoginButton_Click(object sender, EventArgs e)
 		{
 			var settings = Properties.Settings.Default;
 			var clientId = (string)settings["ClientId"] ?? string.Empty;
@@ -128,6 +145,10 @@ namespace Claudia
 
 					this.LoginButton.Enabled = false;
 					this.SoundCloud = new SoundCloud.SoundCloud(form.Token, form.ClientId, HttpMethod.Get);
+
+					var url = await this.SoundCloud.GetLoginAvaterImageUrlAsync();
+					this.LoginButton.BackgroundImage = Common.LoadImageFromUrl(url);
+					this.LoginButton.Image = null;
 				}
 			}
 		}
@@ -187,13 +208,33 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
+		private async void PostButton_Click(object sender, EventArgs e)
+		{
+			var track = this.SoundCloud.Likes[this.SoundCloud.TrackNum];
+
+			var tw = new StringBuilder();
+			tw.Append($"🎵 {track.Title}\r\n");
+			tw.Append($"🎙 {track.User.UserName}\r\n");
+			tw.Append("💿 Likes\r\n");
+			tw.Append("#nowplaying #Claudia #SoundCloud");
+
+			using (var client = new WebClient())
+			using (var stream = new MemoryStream(client.DownloadData(track.ArtworkUrl)))
+				await _Twitter.UpdateWithMediaAsync(tw.ToString(), stream);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sender"></param>
+		/// <param name="e"></param>
 		private void PlayButton_Click(object sender, EventArgs e)
 		{
 			if (!this._CProperties.IsPlaying)
 			{
-				var track = this.SoundCloud.Likes[this.SoundCloud.TrackNum];
 				this._CProperties.IsPlaying = true;
 
+				var track = this.SoundCloud.Likes[this.SoundCloud.TrackNum];
 				this.CurrentArtwork.Image = Common.LoadImageFromUrl(track.ArtworkUrl) ?? Properties.Resources.none;
 				this.CurrentTrack.Text = $"{track.Title} - {track.User.UserName}";
 				this.TrackDuration.Text = Common.GetCurrentTrackPositionToStr(track.Duration);
@@ -242,6 +283,8 @@ namespace Claudia
 				this._CProperties.WmpVolume = this.VolumeBar.Value;
 			else if (this._CProperties.IsAIMP4Running && this._CProperties.IsAIMP4Checked)
 				this._CProperties.AimpVolume = this.VolumeBar.Value;
+
+			this.VolumeValue.Text = $"{this.VolumeBar.Value}%";
 		}
 
 		/// <summary>
@@ -249,10 +292,7 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void CurrentPosition_Scroll(object sender, EventArgs e)
-		{
-			
-		}
+		private void CurrentPosition_Scroll(object sender, EventArgs e) { }
 
 		#endregion Event Methods
 
@@ -323,12 +363,17 @@ namespace Claudia
 		private void _UpdateTrackInfo(int idx)
 		{
 			var track = this.SoundCloud.Likes[idx];
+			var artUrl = Common.LoadImageFromUrl(track.ArtworkUrl);
+			var duration = Common.GetCurrentTrackPositionToStr(track.Duration);
 
-			this.CurrentArtwork.Image = Common.LoadImageFromUrl(track.ArtworkUrl) ?? Properties.Resources.none;
-			this.CurrentTrack.Text = $"{track.Title} ({Common.GetCurrentTrackPositionToStr(track.Duration)})";
+			this.CurrentArtwork.Image = artUrl ?? Properties.Resources.none;
+			this.CurrentTrack.Text = $"{track.Title} ({duration})";
 			this.CurrentArtist.Text = track.User.UserName;
 			this.CurrentInfo.Text = $"Genre : {track.Genre ?? "-"} / Bpm : {track.Bpm ?? "-"} / LikesCount : {track.LikesCount}";
-			this.TrackDuration.Text = Common.GetCurrentTrackPositionToStr(track.Duration);
+			this.TrackDuration.Text = duration;
+
+			this._NowPlaying = new MiniForm(this, track.ArtworkUrl, track.Title, track.User.UserName, duration);
+			//this._NowPlaying.Refresh();
 
 			var nextTrack = this.SoundCloud.Likes[idx + 1];
 			this.NextAlbumArt.Image = Common.LoadImageFromUrl(nextTrack.ArtworkUrl) ?? Properties.Resources.none;
@@ -354,6 +399,10 @@ namespace Claudia
 		{
 			var os = Environment.OSVersion;
 			this.notifyIcon.Icon = Properties.Resources.icon;
+
+			var duration = Common.GetCurrentTrackPositionToStr(track.Duration);
+			this._NowPlaying = new MiniForm(this, track.ArtworkUrl, track.Title, track.User.UserName, duration);
+			//this._NowPlaying.Refresh();
 
 			if (os.Version.Major >= 6 && os.Version.Minor >= 2)
 			{

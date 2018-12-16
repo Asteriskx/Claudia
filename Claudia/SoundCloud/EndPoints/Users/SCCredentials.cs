@@ -1,4 +1,6 @@
-﻿using Claudia.SoundCloud.Helper;
+﻿using Claudia.Exceptions;
+using Claudia.Interop.Enum;
+using Claudia.SoundCloud.Helper;
 using System.Net.Http;
 
 namespace Claudia.SoundCloud.EndPoints.Users
@@ -6,7 +8,7 @@ namespace Claudia.SoundCloud.EndPoints.Users
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SCUsers
+	public class SCCredentials
 	{
 		#region Properties
 
@@ -35,7 +37,7 @@ namespace Claudia.SoundCloud.EndPoints.Users
 		/// </summary>
 		/// <param name="token"></param>
 		/// <param name="type"></param>
-		public SCUsers(string token, string clientId, HttpMethod type)
+		public SCCredentials(string token, string clientId, HttpMethod type)
 		{
 			this._Token = token;
 			this._ClientId = clientId;
@@ -45,17 +47,31 @@ namespace Claudia.SoundCloud.EndPoints.Users
 
 		#endregion Constructor
 
-		#region Private Method
+		#region Public Method
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public HttpRequestMessage GetRequestMessage()
+		public HttpRequestMessage GetRequestMessage(RequestType type)
 		{
-			return ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.Favorites, this._ClientId, "limit=200&linked_partitioning=1");
+			switch (type)
+			{
+				case RequestType.LoginUser:
+					return ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.User, this._ClientId);
+
+				case RequestType.Stream:
+				case RequestType.PlayList:
+					return null;
+
+				case RequestType.Likes:
+					return ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.Favorites, this._ClientId, "limit=200&linked_partitioning=1");
+
+				default:
+					throw new ClaudiaException("Sorry, not found RequestTypes...");
+			}
 		}
 
-		#endregion Private Method
+		#endregion Public Method
 	}
 }

@@ -1,4 +1,6 @@
-﻿using Claudia.SoundCloud.EndPoints;
+﻿using Claudia.Interop.Enum;
+using Claudia.SoundCloud.EndPoints;
+using Claudia.SoundCloud.EndPoints.Users;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Net.Http;
@@ -38,6 +40,22 @@ namespace Claudia.SoundCloud
 		/// 
 		/// </summary>
 		/// <returns></returns>
+		public async Task<string> GetLoginAvaterImageUrlAsync()
+		{
+			var connection = this.SCCredentials.GetRequestMessage(RequestType.LoginUser);
+
+			var response = await this.Client.SendAsync(connection);
+
+			var resString = await response.Content.ReadAsStringAsync();
+			resString = resString.Replace("large", "t500x500");
+
+			return JsonConvert.DeserializeObject<SCUser>(resString).AvatarUrl;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <returns></returns>
 		public async Task GetStreamAsync()
 		{
 
@@ -61,7 +79,7 @@ namespace Claudia.SoundCloud
 			var idx = 0;
 			while (true)
 			{
-				var connection = this.SCUsers.GetRequestMessage();
+				var connection = this.SCCredentials.GetRequestMessage(RequestType.Likes);
 
 				var response = (!_IsNextHref) ?
 					await this.Client.SendAsync(connection) :

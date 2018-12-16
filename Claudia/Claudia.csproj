@@ -96,8 +96,7 @@
     <StartupObject>Claudia.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>
-    </ApplicationIcon>
+    <ApplicationIcon>Resources\icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Legato, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -117,6 +116,9 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="Twist">
+      <HintPath>..\..\TwistSDK\Twist\bin\Debug\netstandard2.0\Twist.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Exceptions\ClaudiaException.cs" />
@@ -124,6 +126,7 @@
     <Compile Include="Interop\ClaudiaObserver.cs" />
     <Compile Include="Interop\ClaudiaProperties.cs" />
     <Compile Include="Interop\Commands.cs" />
+    <Compile Include="Interop\Enum\RequestType.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -144,7 +147,8 @@
     </Compile>
     <Compile Include="SoundCloud\Credentials.cs" />
     <Compile Include="SoundCloud\EndPoints\Pagenation.cs" />
-    <Compile Include="SoundCloud\EndPoints\Users\SCUsers.cs" />
+    <Compile Include="SoundCloud\EndPoints\Users\SCCredentials.cs" />
+    <Compile Include="SoundCloud\EndPoints\Users\SCUser.cs" />
     <Compile Include="SoundCloud\Helper\CliendIdRequestHandler.cs" />
     <Compile Include="SoundCloud\Helper\CookieVisitor.cs" />
     <Compile Include="LoginForm.cs">

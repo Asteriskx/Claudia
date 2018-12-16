@@ -6,7 +6,7 @@ namespace Claudia.SoundCloud
 	public class Credentials
 	{
 		protected HttpClient Client { get; set; } = new HttpClient();
-		protected SCUsers SCUsers { get; set; }
+		protected SCCredentials SCCredentials { get; set; }
 		protected string Token { get; set; }
 		public string ClientId { get; set; }
 
@@ -14,7 +14,7 @@ namespace Claudia.SoundCloud
 		{
 			this.Token = token;
 			this.ClientId = clientId;
-			this.SCUsers = new SCUsers(token, clientId, type);
+			this.SCCredentials = new SCCredentials(token, clientId, type);
 		}
 	}
 }

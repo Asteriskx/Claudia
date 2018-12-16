@@ -59,6 +59,11 @@ namespace Claudia.Interop
 		/// </summary>
 		public int WmpVolume { set => this._Wmp.settings.volume = value; }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public int WmpTrackPosition { get; set; }
+
 		#endregion WMP Sides
 
 		#region MusicBee Sides
