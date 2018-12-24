@@ -28,7 +28,6 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
 			this.panel2 = new System.Windows.Forms.Panel();
 			this.PostButton = new System.Windows.Forms.Button();
@@ -48,7 +47,6 @@
 			this.NextButton = new System.Windows.Forms.Button();
 			this.CurrentTrack = new System.Windows.Forms.Label();
 			this.artPanel = new System.Windows.Forms.FlowLayoutPanel();
-			this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.CurrentInfo = new System.Windows.Forms.Label();
 			this.CurrentArtist = new System.Windows.Forms.Label();
@@ -56,15 +54,22 @@
 			this.NextArtist = new System.Windows.Forms.Label();
 			this.CurrentArtwork = new System.Windows.Forms.PictureBox();
 			this.axWmp = new AxWMPLib.AxWindowsMediaPlayer();
+			this.Playlist = new System.Windows.Forms.TabControl();
+			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.tabPage3 = new System.Windows.Forms.TabPage();
+			this.EndDuration = new System.Windows.Forms.Label();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.NextAlbumArt)).BeginInit();
 			this.panel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.CurrentPosition)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.VolumeBar)).BeginInit();
+			this.artPanel.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.CurrentArtwork)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.axWmp)).BeginInit();
+			this.Playlist.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel2
@@ -85,9 +90,9 @@
 			this.PostButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.PostButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.PostButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.PostButton.ForeColor = System.Drawing.Color.White;
+			this.PostButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.PostButton.Image = global::Claudia.Properties.Resources.send;
-			this.PostButton.Location = new System.Drawing.Point(5, 154);
+			this.PostButton.Location = new System.Drawing.Point(4, 142);
 			this.PostButton.Name = "PostButton";
 			this.PostButton.Size = new System.Drawing.Size(40, 40);
 			this.PostButton.TabIndex = 19;
@@ -101,9 +106,9 @@
 			this.LoginButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
 			this.LoginButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.LoginButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.LoginButton.ForeColor = System.Drawing.Color.White;
+			this.LoginButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.LoginButton.Image = global::Claudia.Properties.Resources.account;
-			this.LoginButton.Location = new System.Drawing.Point(5, 668);
+			this.LoginButton.Location = new System.Drawing.Point(4, 670);
 			this.LoginButton.Name = "LoginButton";
 			this.LoginButton.Size = new System.Drawing.Size(40, 40);
 			this.LoginButton.TabIndex = 17;
@@ -116,9 +121,9 @@
 			this.LikesButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.LikesButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.LikesButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.LikesButton.ForeColor = System.Drawing.Color.White;
+			this.LikesButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.LikesButton.Image = global::Claudia.Properties.Resources.fav;
-			this.LikesButton.Location = new System.Drawing.Point(5, 106);
+			this.LikesButton.Location = new System.Drawing.Point(3, 96);
 			this.LikesButton.Name = "LikesButton";
 			this.LikesButton.Size = new System.Drawing.Size(40, 40);
 			this.LikesButton.TabIndex = 2;
@@ -131,9 +136,9 @@
 			this.PlayListsButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.PlayListsButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.PlayListsButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.PlayListsButton.ForeColor = System.Drawing.Color.White;
+			this.PlayListsButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.PlayListsButton.Image = global::Claudia.Properties.Resources.playlist;
-			this.PlayListsButton.Location = new System.Drawing.Point(5, 58);
+			this.PlayListsButton.Location = new System.Drawing.Point(6, 54);
 			this.PlayListsButton.Name = "PlayListsButton";
 			this.PlayListsButton.Size = new System.Drawing.Size(40, 40);
 			this.PlayListsButton.TabIndex = 1;
@@ -146,9 +151,9 @@
 			this.StreamButton.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.StreamButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.StreamButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.StreamButton.ForeColor = System.Drawing.Color.White;
+			this.StreamButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(32)))), ((int)(((byte)(32)))), ((int)(((byte)(32)))));
 			this.StreamButton.Image = global::Claudia.Properties.Resources.stream;
-			this.StreamButton.Location = new System.Drawing.Point(5, 10);
+			this.StreamButton.Location = new System.Drawing.Point(5, 12);
 			this.StreamButton.Name = "StreamButton";
 			this.StreamButton.Size = new System.Drawing.Size(40, 40);
 			this.StreamButton.TabIndex = 0;
@@ -183,7 +188,8 @@
 			// panel3
 			// 
 			this.panel3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-			this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.panel3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(96)))), ((int)(((byte)(96)))));
+			this.panel3.Controls.Add(this.EndDuration);
 			this.panel3.Controls.Add(this.VolumeValue);
 			this.panel3.Controls.Add(this.CurrentPosition);
 			this.panel3.Controls.Add(this.VolumeBar);
@@ -210,7 +216,7 @@
 			// CurrentPosition
 			// 
 			this.CurrentPosition.LargeChange = 1;
-			this.CurrentPosition.Location = new System.Drawing.Point(11, 16);
+			this.CurrentPosition.Location = new System.Drawing.Point(49, 16);
 			this.CurrentPosition.Maximum = 100;
 			this.CurrentPosition.Name = "CurrentPosition";
 			this.CurrentPosition.Size = new System.Drawing.Size(967, 45);
@@ -232,7 +238,7 @@
 			// 
 			this.TrackDuration.AutoSize = true;
 			this.TrackDuration.ForeColor = System.Drawing.Color.White;
-			this.TrackDuration.Location = new System.Drawing.Point(992, 17);
+			this.TrackDuration.Location = new System.Drawing.Point(12, 17);
 			this.TrackDuration.Name = "TrackDuration";
 			this.TrackDuration.Size = new System.Drawing.Size(33, 18);
 			this.TrackDuration.TabIndex = 19;
@@ -242,9 +248,9 @@
 			// 
 			this.PrevButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.PrevButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.PrevButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.PrevButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(96)))), ((int)(((byte)(96)))));
 			this.PrevButton.Image = global::Claudia.Properties.Resources.prev;
-			this.PrevButton.Location = new System.Drawing.Point(1048, 8);
+			this.PrevButton.Location = new System.Drawing.Point(1066, 8);
 			this.PrevButton.Name = "PrevButton";
 			this.PrevButton.Size = new System.Drawing.Size(35, 35);
 			this.PrevButton.TabIndex = 16;
@@ -255,9 +261,9 @@
 			// 
 			this.PlayButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.PlayButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.PlayButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.PlayButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(96)))), ((int)(((byte)(96)))));
 			this.PlayButton.Image = global::Claudia.Properties.Resources.play;
-			this.PlayButton.Location = new System.Drawing.Point(1088, 8);
+			this.PlayButton.Location = new System.Drawing.Point(1106, 8);
 			this.PlayButton.Name = "PlayButton";
 			this.PlayButton.Size = new System.Drawing.Size(35, 35);
 			this.PlayButton.TabIndex = 10;
@@ -268,9 +274,9 @@
 			// 
 			this.NextButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
 			this.NextButton.Font = new System.Drawing.Font("メイリオ", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(128)));
-			this.NextButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+			this.NextButton.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(96)))), ((int)(((byte)(96)))));
 			this.NextButton.Image = global::Claudia.Properties.Resources.next;
-			this.NextButton.Location = new System.Drawing.Point(1129, 8);
+			this.NextButton.Location = new System.Drawing.Point(1144, 8);
 			this.NextButton.Name = "NextButton";
 			this.NextButton.Size = new System.Drawing.Size(35, 35);
 			this.NextButton.TabIndex = 12;
@@ -295,21 +301,17 @@
 			// 
 			this.artPanel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
 			this.artPanel.AutoScroll = true;
+			this.artPanel.Controls.Add(this.Playlist);
 			this.artPanel.Location = new System.Drawing.Point(50, 128);
 			this.artPanel.Name = "artPanel";
 			this.artPanel.Size = new System.Drawing.Size(1297, 589);
 			this.artPanel.TabIndex = 7;
 			// 
-			// notifyIcon
-			// 
-			this.notifyIcon.Text = "notifyIcon1";
-			this.notifyIcon.Visible = true;
-			// 
 			// panel1
 			// 
 			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.panel1.BackColor = System.Drawing.Color.DarkSlateGray;
+			this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
 			this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
 			this.panel1.Controls.Add(this.CurrentInfo);
 			this.panel1.Controls.Add(this.CurrentArtist);
@@ -397,6 +399,58 @@
 			this.axWmp.TabIndex = 7;
 			this.axWmp.Visible = false;
 			// 
+			// Playlist
+			// 
+			this.Playlist.Controls.Add(this.tabPage1);
+			this.Playlist.Controls.Add(this.tabPage2);
+			this.Playlist.Controls.Add(this.tabPage3);
+			this.Playlist.Location = new System.Drawing.Point(3, 3);
+			this.Playlist.Name = "Playlist";
+			this.Playlist.SelectedIndex = 0;
+			this.Playlist.Size = new System.Drawing.Size(1294, 586);
+			this.Playlist.TabIndex = 0;
+			this.Playlist.Visible = false;
+			// 
+			// tabPage1
+			// 
+			this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			this.tabPage1.Name = "tabPage1";
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage1.Size = new System.Drawing.Size(1286, 560);
+			this.tabPage1.TabIndex = 0;
+			this.tabPage1.Text = "tabPage1";
+			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// tabPage2
+			// 
+			this.tabPage2.Location = new System.Drawing.Point(4, 22);
+			this.tabPage2.Name = "tabPage2";
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage2.Size = new System.Drawing.Size(1286, 560);
+			this.tabPage2.TabIndex = 1;
+			this.tabPage2.Text = "tabPage2";
+			this.tabPage2.UseVisualStyleBackColor = true;
+			// 
+			// tabPage3
+			// 
+			this.tabPage3.Location = new System.Drawing.Point(4, 22);
+			this.tabPage3.Name = "tabPage3";
+			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage3.Size = new System.Drawing.Size(1286, 560);
+			this.tabPage3.TabIndex = 2;
+			this.tabPage3.Text = "tabPage3";
+			this.tabPage3.UseVisualStyleBackColor = true;
+			// 
+			// EndDuration
+			// 
+			this.EndDuration.AutoSize = true;
+			this.EndDuration.ForeColor = System.Drawing.Color.White;
+			this.EndDuration.Location = new System.Drawing.Point(1022, 17);
+			this.EndDuration.Name = "EndDuration";
+			this.EndDuration.Size = new System.Drawing.Size(33, 18);
+			this.EndDuration.TabIndex = 23;
+			this.EndDuration.Text = "--:--";
+			// 
 			// MainForm
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -421,12 +475,14 @@
 			this.panel3.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.CurrentPosition)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.VolumeBar)).EndInit();
+			this.artPanel.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.CurrentArtwork)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.axWmp)).EndInit();
+			this.Playlist.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}
@@ -448,7 +504,6 @@
 		private System.Windows.Forms.Button LoginButton;
 		private System.Windows.Forms.FlowLayoutPanel artPanel;
 		private System.Windows.Forms.TrackBar VolumeBar;
-		private System.Windows.Forms.NotifyIcon notifyIcon;
 		private AxWMPLib.AxWindowsMediaPlayer axWmp;
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.PictureBox CurrentArtwork;
@@ -459,5 +514,10 @@
 		private System.Windows.Forms.Label CurrentArtist;
 		private System.Windows.Forms.Label VolumeValue;
 		private System.Windows.Forms.Button PostButton;
+		private System.Windows.Forms.TabControl Playlist;
+		private System.Windows.Forms.TabPage tabPage1;
+		private System.Windows.Forms.TabPage tabPage2;
+		private System.Windows.Forms.TabPage tabPage3;
+		private System.Windows.Forms.Label EndDuration;
 	}
 }

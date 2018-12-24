@@ -1,4 +1,5 @@
 ﻿using Claudia.SoundCloud.EndPoints;
+using Claudia.SoundCloud.EndPoints.Tracks;
 using System;
 using WMPLib;
 
@@ -52,6 +53,19 @@ namespace Claudia.Interop
 		/// <param name="sc"></param>
 		/// <param name="track"></param>
 		public override void Play(SoundCloud.SoundCloud sc, SCFavoriteObjects track)
+		{
+			this._Wmp.URL = $"{track.Uri}/stream?client_id={sc.ClientId}";
+			this._Wmp.controls.play();
+
+			Console.WriteLine($"play is = {track.Title} - {track.Uri}/stream?client_id={sc.ClientId}");
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="sc"></param>
+		/// <param name="track"></param>
+		public override void Play(SoundCloud.SoundCloud sc, Track track)
 		{
 			this._Wmp.URL = $"{track.Uri}/stream?client_id={sc.ClientId}";
 			this._Wmp.controls.play();

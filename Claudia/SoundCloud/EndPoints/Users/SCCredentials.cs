@@ -61,8 +61,10 @@ namespace Claudia.SoundCloud.EndPoints.Users
 					return ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.User, this._ClientId);
 
 				case RequestType.Stream:
-				case RequestType.PlayList:
 					return null;
+
+				case RequestType.PlayList:
+					return ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.Playlists, this._ClientId);
 
 				case RequestType.Likes:
 					return ProvideRequest.CreateRequest(this._Token, this._Type, this._Users.Favorites, this._ClientId, "limit=200&linked_partitioning=1");

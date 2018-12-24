@@ -1,6 +1,7 @@
 ﻿using Claudia.SoundCloud.EndPoints;
+using Claudia.SoundCloud.EndPoints.Tracks;
+using Claudia.SoundCloud.EndPoints.Users;
 using Claudia.Utility;
-using Legato;
 using System;
 using System.Diagnostics;
 using System.Windows.Forms;
@@ -45,7 +46,8 @@ namespace Claudia.Interop
 		/// 現状は、Likes に登録した曲のみが対象となっています。
 		/// 今後、Stream 及び PlayList にも対応する予定です。
 		/// </remarks>
-		public event Action<SCFavoriteObjects> CurrentTrackChanged;
+		public event Action<SCFavoriteObjects> LikesCurrentTrackChanged;
+		public event Action<SCPlayListObjects> PlayListCurrentTrackChanged;
 
 		#endregion Events
 
@@ -68,7 +70,10 @@ namespace Claudia.Interop
 		/// 
 		/// </summary>
 		public void Initialize()
-		{			
+		{
+			this.LikesCurrentTrackChanged += _CurrentTrackChanged;
+			this.PlayListCurrentTrackChanged += _CurrentTrackChanged;
+
 			this._UpdateTimer.Elapsed += (o, e) =>
 			{
 				this._Parent.Invoke((MethodInvoker)(() =>
@@ -97,10 +102,18 @@ namespace Claudia.Interop
 							this._UpdateTimer.Start();
 							this._PlayCount++;
 
-							var track = this._Parent.SoundCloud.Likes[this._Parent.SoundCloud.TrackNum];
 							if (this._PlayCount == 3)
 							{
-								this.CurrentTrackChanged?.Invoke(track);
+								if (this._Parent.IsGetLikes)
+								{
+									var track = this._Parent.SoundCloud.Likes[this._Parent.SoundCloud.TrackNum];
+									LikesCurrentTrackChanged?.Invoke(track);
+								}
+								else if (this._Parent.IsGetPlaylists)
+								{
+									var track = this._Parent.SoundCloud.Playlists[this._Parent.SoundCloud.TrackNum];
+									PlayListCurrentTrackChanged?.Invoke(track);
+								}
 								this._PlayCount = 0;
 							}
 
@@ -141,9 +154,23 @@ namespace Claudia.Interop
 		/// </summary>
 		public void Dispose()
 		{
+			this._UpdateTimer.Stop();
+			this._PlayTimer.Stop();
 			this._UpdateTimer.Dispose();
 			this._PlayTimer.Dispose();
 			this._Wmp.close();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="track"></param>
+		private void _CurrentTrackChanged<T>(T track)
+		{
+			if (track is SCFavoriteObjects)
+				new NotifyMessage<SCFavoriteObjects>((SCFavoriteObjects)(object)track);
+			else if (track is Track)
+				new NotifyMessage<Track>((Track)(object)track);
 		}
 
 		#endregion Public Methods

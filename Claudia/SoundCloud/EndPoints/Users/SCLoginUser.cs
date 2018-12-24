@@ -5,7 +5,7 @@ namespace Claudia.SoundCloud.EndPoints.Users
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SCUser
+	public class SCLoginUser
 	{
 		[JsonProperty("id")]
 		public int Id { get; set; }

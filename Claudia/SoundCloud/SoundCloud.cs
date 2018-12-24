@@ -2,6 +2,7 @@
 using Claudia.SoundCloud.EndPoints;
 using Claudia.SoundCloud.EndPoints.Users;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -14,11 +15,25 @@ namespace Claudia.SoundCloud
 	public class SoundCloud : Credentials
 	{
 		#region Properties
+		
+		#region Like's Properties
 
-		private bool _IsNextHref { get; set; } = false;
-		public List<string> NextHrefList { get; private set; } = new List<string>();
 		public List<SCFavoriteObjects> Likes { get; private set; } = new List<SCFavoriteObjects>();
+		public List<string> NextHrefList { get; private set; } = new List<string>();
+		private bool _IsNextHref { get; set; } = false;
 		public int TrackNum { get; set; } = 0;
+
+		#endregion Like's Properties
+
+		#region PlayList's Properties
+
+		public List<SCPlayListObjects> Playlists { get; private set; } = new List<SCPlayListObjects>();
+		public Dictionary<string, string> PostData { get; set; }
+		public int TabIdx { get; set; } = 0;
+		public int ListTrackIdx { get; set; } = 0;
+		public string ArtworkUrl { get; set; }
+
+		#endregion PlayList's Properties
 
 		#endregion Properties
 
@@ -39,42 +54,50 @@ namespace Claudia.SoundCloud
 		/// <summary>
 		/// 
 		/// </summary>
+		private async Task<string> _GetLoginUserAsync()
+		{
+			var connection = this.SCCredentials.GetRequestMessage(RequestType.LoginUser);
+			var response = await this.Client.SendAsync(connection);
+			return await response.Content.ReadAsStringAsync();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
 		/// <returns></returns>
+		public async Task<string> GetLoginUserNameAsync()
+		{
+			var userData = await _GetLoginUserAsync();
+			return JsonConvert.DeserializeObject<SCLoginUser>(userData).UserName;
+		}
+
+		/// <summary>
+		/// ログインユーザの公式リンク先を取得します。
+		/// </summary>
+		/// <returns> ログインユーザのリンク URL </returns>
 		public async Task<string> GetProfileUrlAsync()
 		{
-			var connection = this.SCCredentials.GetRequestMessage(RequestType.LoginUser);
-
-			var response = await this.Client.SendAsync(connection);
-
-			var resString = await response.Content.ReadAsStringAsync();
-
-			return JsonConvert.DeserializeObject<SCUser>(resString).PermalinkUrl;
+			var userData = await _GetLoginUserAsync();
+			return JsonConvert.DeserializeObject<SCLoginUser>(userData).PermalinkUrl;
 		}
 
 		/// <summary>
-		/// 
+		/// ログインユーザのアバター画像 URL を非同期にて取得します。
 		/// </summary>
-		/// <returns></returns>
+		/// <returns> ログインユーザのアバター画像 URL </returns>
 		public async Task<string> GetLoginAvaterImageUrlAsync()
 		{
-			var connection = this.SCCredentials.GetRequestMessage(RequestType.LoginUser);
+			var userData = await _GetLoginUserAsync();
+			userData = userData.Replace("large", "t500x500");
 
-			var response = await this.Client.SendAsync(connection);
-
-			var resString = await response.Content.ReadAsStringAsync();
-			resString = resString.Replace("large", "t500x500");
-
-			return JsonConvert.DeserializeObject<SCUser>(resString).AvatarUrl;
+			return JsonConvert.DeserializeObject<SCLoginUser>(userData).AvatarUrl;
 		}
 
 		/// <summary>
 		/// 
 		/// </summary>
 		/// <returns></returns>
-		public async Task GetStreamAsync()
-		{
-
-		}
+		public async Task GetStreamAsync() { }
 
 		/// <summary>
 		/// 
@@ -82,13 +105,18 @@ namespace Claudia.SoundCloud
 		/// <returns></returns>
 		public async Task GetPlayListAsync()
 		{
+			var connection = this.SCCredentials.GetRequestMessage(RequestType.PlayList);
+			var response = await this.Client.SendAsync(connection);
+			var resString = await response.Content.ReadAsStringAsync();
+			resString = resString.Replace("large", "t500x500");
 
+			var data = JsonConvert.DeserializeObject<List<SCPlayListObjects>>(resString);
+			this.Playlists.AddRange(data);
 		}
 
 		/// <summary>
-		/// 
+		/// Like's に登録されている曲を非同期で取得します。
 		/// </summary>
-		/// <returns></returns>
 		public async Task GetFavoriteSongsListAsync()
 		{
 			var idx = 0;
@@ -96,6 +124,7 @@ namespace Claudia.SoundCloud
 			{
 				var connection = this.SCCredentials.GetRequestMessage(RequestType.Likes);
 
+				// next_href(次 Like's Track 群へのアクセスリンク) の有無をチェック
 				var response = (!_IsNextHref) ?
 					await this.Client.SendAsync(connection) :
 					await this.Client.SendAsync(new HttpRequestMessage(HttpMethod.Get, this.NextHrefList[idx - 1]));

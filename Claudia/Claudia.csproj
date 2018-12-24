@@ -139,10 +139,14 @@
     <Compile Include="MiniForm.Designer.cs">
       <DependentUpon>MiniForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Services\Twitter.cs" />
     <Compile Include="SoundCloud\Credentials.cs" />
     <Compile Include="SoundCloud\EndPoints\Pagenation.cs" />
+    <Compile Include="SoundCloud\EndPoints\Tracks\Track.cs" />
     <Compile Include="SoundCloud\EndPoints\Users\SCCredentials.cs" />
-    <Compile Include="SoundCloud\EndPoints\Users\SCUser.cs" />
+    <Compile Include="SoundCloud\EndPoints\Users\SCPlayListObjects.cs" />
+    <Compile Include="SoundCloud\EndPoints\Users\SCLoginUser.cs" />
+    <Compile Include="SoundCloud\EndPoints\Users\User.cs" />
     <Compile Include="SoundCloud\Helper\CliendIdRequestHandler.cs" />
     <Compile Include="SoundCloud\Helper\CookieVisitor.cs" />
     <Compile Include="LoginForm.cs">
@@ -161,6 +165,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Utility\Common.cs" />
+    <Compile Include="Utility\GenericEventArgs.cs" />
+    <Compile Include="Utility\NotifyMessage.cs" />
     <EmbeddedResource Include="LoginForm.resx">
       <DependentUpon>LoginForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -206,7 +212,6 @@
     <Folder Include="SoundCloud\EndPoints\Oembed\" />
     <Folder Include="SoundCloud\EndPoints\PlayLists\" />
     <Folder Include="SoundCloud\EndPoints\Resolve\" />
-    <Folder Include="SoundCloud\EndPoints\Tracks\" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

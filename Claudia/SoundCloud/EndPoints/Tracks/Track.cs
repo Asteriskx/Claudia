@@ -1,15 +1,13 @@
 ﻿using Claudia.SoundCloud.EndPoints.Users;
 using Newtonsoft.Json;
 
-namespace Claudia.SoundCloud.EndPoints
+namespace Claudia.SoundCloud.EndPoints.Tracks
 {
 	/// <summary>
-	/// Users/Favorites Lists persed for Json.
+	/// 
 	/// </summary>
-	public class SCFavoriteObjects
+	public class Track
 	{
-		#region Properties
-
 		[JsonProperty("kind")]
 		public string Kind { get; set; }
 
@@ -162,7 +160,5 @@ namespace Claudia.SoundCloud.EndPoints
 
 		[JsonProperty("download_url")]
 		public string DownloadUrl { get; set; }
-
-		#endregion Properties
 	}
 }

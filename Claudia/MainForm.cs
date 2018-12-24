@@ -1,7 +1,8 @@
 ﻿using Claudia.Interop;
-using Claudia.SoundCloud.EndPoints;
+using Claudia.Services;
 using Claudia.Utility;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -36,18 +37,10 @@ namespace Claudia
 		/// 
 		/// </summary>
 		private MiniForm _NowPlaying { get; set; }
-		private bool _IsGetLikes { get; set; } = false;
+		public bool IsGetLikes { get; set; } = false;
+		public bool IsGetPlaylists { get; set; } = false;
 
-		#region Twitter
-
-		private static readonly string _ck = "ck";
-		private static readonly string _cs = "cs";
-		private static readonly string _at = "at";
-		private static readonly string _ats = "ats";
-
-		private Twist.Twitter _Twitter { get; set; } = new Twist.Twitter(_ck, _cs, _at, _ats, new HttpClient(new HttpClientHandler()));
-
-		#endregion Twitter
+		private Twitter _Twitter { get; set; } = new Twitter();
 
 		#endregion Properties
 
@@ -74,7 +67,6 @@ namespace Claudia
 			this._Commands = new ClaudiaCommands(this._Wmp, this._Properties, this._Observer);
 
 			this._Observer.PositionPropertyChanged += _PositionPropertyChanged;
-			this._Observer.CurrentTrackChanged += _CurrentTrackChanged;
 			this._Observer.Initialize();
 
 			this.DoubleBuffered = true;
@@ -166,9 +158,78 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void PlayListsButton_Click(object sender, EventArgs e) 
+		private async void PlayListsButton_Click(object sender, EventArgs e)
 		{
-			MessageBox.Show("PlayList is Coming soon...", "PlayList is Unimplemented!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+			this.Playlist.Visible = true;
+			if (!this.IsGetPlaylists)
+			{
+				this.IsGetPlaylists = true;
+				var data = new Dictionary<string, int>()
+				{
+					{ "TrackName", 600 },
+					{ "Artist", 200 },
+					{ "URL", 300 },
+					{ "Genre", 70 },
+					{ "Duration", 100 }
+				};
+
+				this.IsGetPlaylists = true;
+				await this.SoundCloud.GetPlayListAsync();
+
+				foreach (var i in Enumerable.Range(this.Playlist.TabCount + 1, this.SoundCloud.Playlists.Count - this.Playlist.TabCount))
+				{
+					var tab = new TabPage { Name = $"tabPage{i}", Text = $"tabPage{i}" };
+					this.Playlist.TabPages.Add(tab);
+				}
+
+				foreach (var list in this.SoundCloud.Playlists.Select((value, idx) => new { value, idx }))
+				{
+					if (list.idx < this.SoundCloud.Playlists.Count)
+					{
+						var listView = new ListView
+						{
+							Size = new Size(1270, 550),
+							FullRowSelect = true,
+							GridLines = true,
+							Sorting = SortOrder.None,
+							View = View.Details
+						};
+
+						// ヘッダ追加
+						foreach (var kvp in data)
+							listView.Columns.Add(ColumnHeaderEx.GetColumnHeader(kvp.Key, kvp.Value));
+
+						var tab = (TabPage)this.Playlist.Controls[$"tabPage{list.idx + 1}"];
+						tab.Text = list.value.Title;
+
+						foreach (var track in list.value.Tracks)
+						{
+							var mainItem = listView.Items.Add(track.Title);
+							mainItem.SubItems.Add(track.User.UserName);
+							mainItem.SubItems.Add($"{track.StreamUrl}?client_id={this.SoundCloud.ClientId}");
+							mainItem.SubItems.Add(track.Genre);
+							mainItem.SubItems.Add(Common.GetCurrentTrackPositionToStr(track.Duration));
+						}
+
+						listView.DoubleClick += (s, ev) =>
+						{
+							if (listView.SelectedItems.Count > 0)
+							{
+								this.SoundCloud.TabIdx = Playlist.SelectedIndex;
+								this.SoundCloud.ListTrackIdx = listView.SelectedItems[0].Index;
+								var item = listView.SelectedItems[0];
+								this.SoundCloud.ArtworkUrl = list.value.Tracks[this.SoundCloud.ListTrackIdx].ArtworkUrl;
+								this.SoundCloud.PostData = new Dictionary<string, string> { { item.Text , item.SubItems[1].Text } };
+								this._UpdateTrackInfoTest(this.SoundCloud.TabIdx, this.SoundCloud.ListTrackIdx);
+							}
+						};
+
+						tab.Controls.Add(listView);
+					}
+				}
+			}
+
+			//this.artPanel.Visible = false;
 		}
 
 		/// <summary>
@@ -179,9 +240,10 @@ namespace Claudia
 		private async void LikesButton_Click(object sender, EventArgs e)
 		{
 			// 現状は初回押下時のみ動作
-			if (!this._IsGetLikes)
+			if (!this.IsGetLikes)
 			{
-				this._IsGetLikes = true;
+				this.Playlist.Visible = false;
+				this.IsGetLikes = true;
 				await this.SoundCloud.GetFavoriteSongsListAsync();
 				await this._CreateArtworksAsync();
 				await this._DefaultViewAlbumListAsync();
@@ -198,7 +260,14 @@ namespace Claudia
 					var url = $"{data[i].StreamUrl}?client_id={this.SoundCloud.ClientId}";
 					Console.WriteLine($"TrackInfo[{i}] : {data[i].Title} - {url}");
 				}
-
+			}
+			else
+			{
+				if (this.IsGetLikes)
+				{
+					this.Playlist.Visible = false;
+					this.artPanel.Visible = true;
+				}
 			}
 		}
 
@@ -209,17 +278,36 @@ namespace Claudia
 		/// <param name="e"></param>
 		private async void PostButton_Click(object sender, EventArgs e)
 		{
-			var track = this.SoundCloud.Likes[this.SoundCloud.TrackNum];
+			var loginUser = await this.SoundCloud.GetLoginUserNameAsync();
 
-			var tw = new StringBuilder();
-			tw.Append($"🎵 {track.Title}\r\n");
-			tw.Append($"🎙 {track.User.UserName}\r\n");
-			tw.Append("💿 Likes\r\n");
-			tw.Append("#nowplaying #Claudia #SoundCloud");
+			if (this.IsGetLikes)
+			{
+				var track = this.SoundCloud.Likes[this.SoundCloud.TrackNum];
+				var tw = new StringBuilder();
+				tw.Append($"🎵 {track.Title}\r\n");
+				tw.Append($"🎙 {track.User.UserName}\r\n");
+				tw.Append($"💿 {loginUser}'s Likes\r\n");
+				tw.Append("#nowplaying #Claudia #SoundCloud");
 
-			using (var client = new WebClient())
-			using (var stream = new MemoryStream(client.DownloadData(track.ArtworkUrl)))
-				await _Twitter.UpdateWithMediaAsync(tw.ToString(), stream);
+				using (var client = new WebClient())
+				using (var stream = new MemoryStream(client.DownloadData(track.ArtworkUrl)))
+					await _Twitter.Twist.UpdateWithMediaAsync(tw.ToString(), stream);
+			}
+			else if (this.IsGetPlaylists)
+			{
+				foreach (var kvp in this.SoundCloud.PostData)
+				{
+					var tw = new StringBuilder();
+					tw.Append($"🎵 {kvp.Key}\r\n");
+					tw.Append($"🎙 {kvp.Value}\r\n");
+					tw.Append($"💿 {loginUser}'s Likes\r\n");
+					tw.Append("#nowplaying #Claudia #SoundCloud");
+
+					using (var client = new WebClient())
+					using (var stream = new MemoryStream(client.DownloadData(this.SoundCloud.ArtworkUrl)))
+						await _Twitter.Twist.UpdateWithMediaAsync(tw.ToString(), stream);
+				}
+			}
 		}
 
 		/// <summary>
@@ -268,7 +356,10 @@ namespace Claudia
 		private void NextButton_Click(object sender, EventArgs e)
 		{
 			this.SoundCloud.TrackNum++;
-			this._UpdateTrackInfo(this.SoundCloud.TrackNum);
+			if (this.IsGetLikes)
+				this._UpdateTrackInfo(this.SoundCloud.TrackNum);
+			else if (this.IsGetPlaylists) ;
+				//this._UpdateTrackInfoTest(this.SoundCloud.TrackNum);
 		}
 
 		/// <summary>
@@ -333,6 +424,7 @@ namespace Claudia
 					};
 
 					this.artPanel.Controls.Add(pictureBox);
+					//this.Text = $"Claudia - Loading... {(i + 1 / this.SoundCloud.Likes.Count + 1) / 100}%";
 				}
 			}));
 		}
@@ -354,6 +446,7 @@ namespace Claudia
 			this.TrackDuration.Text = duration;
 
 			this._NowPlaying = new MiniForm(this, track.ArtworkUrl, track.Title, track.User.UserName, duration);
+			this.EndDuration.Text = Common.GetCurrentTrackPositionToStr(track.Duration);
 
 			var nextTrack = this.SoundCloud.Likes[idx + 1];
 			this.NextAlbumArt.Image = Common.LoadImageFromUrl(nextTrack.ArtworkUrl) ?? Properties.Resources.none;
@@ -368,35 +461,52 @@ namespace Claudia
 		/// <summary>
 		/// 
 		/// </summary>
-		private void _PositionPropertyChanged() =>
-			this.TrackDuration.Text = this._Wmp.controls.currentPositionString;
+		/// <param name="idx"></param>
+		private void _UpdateTrackInfoTest(int tabIdx, int trackIdx)
+		{
+			var track = this.SoundCloud.Playlists[tabIdx].Tracks[trackIdx];
+			var artUrl = Common.LoadImageFromUrl(track.ArtworkUrl);
+			var duration = Common.GetCurrentTrackPositionToStr(track.Duration);
+
+			this._NowPlaying = new MiniForm(this, track.ArtworkUrl, track.Title, track.User.UserName, duration);
+			this.EndDuration.Text = Common.GetCurrentTrackPositionToStr(track.Duration);
+
+			this.CurrentArtwork.Image = artUrl ?? Properties.Resources.none;
+			this.CurrentTrack.Text = $"{track.Title} ({duration})";
+			this.CurrentArtist.Text = track.User.UserName;
+			this.CurrentInfo.Text = $"Genre : {track.Genre ?? "-"} / Bpm : {track.Bpm ?? "-"} / LikesCount : {track.LikesCount}";
+			this.TrackDuration.Text = duration;
+
+			var length = this.SoundCloud.Playlists[tabIdx].Tracks.Length - 1;
+			if (trackIdx < length)
+			{
+				var nextTrack = this.SoundCloud.Playlists[tabIdx].Tracks[trackIdx + 1] ?? null;
+				this.NextAlbumArt.Image = Common.LoadImageFromUrl(nextTrack.ArtworkUrl) ?? Properties.Resources.none;
+				this.NextTrack.Text = nextTrack.Title ?? "-";
+				this.NextArtist.Text = nextTrack.User.UserName ?? "-";
+
+				this.CurrentPosition.Maximum = Common.GetCurrentTrackPositionToInt(track.Duration);
+				this._Commands.Play(this.SoundCloud, track);
+				this.PlayButton.Image = Properties.Resources.pause;
+			}
+			else 
+			{
+				this.NextAlbumArt.Image = Properties.Resources.none;
+				this.NextTrack.Text = "-";
+				this.NextArtist.Text = "-";
+
+				this.CurrentPosition.Maximum = Common.GetCurrentTrackPositionToInt(track.Duration);
+				this._Commands.Play(this.SoundCloud, track);
+				this.PlayButton.Image = Properties.Resources.pause;
+			}
+		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="track"></param>
-		private void _CurrentTrackChanged<T>(T track) where T : SCFavoriteObjects
-		{
-			var os = Environment.OSVersion;
-			this.notifyIcon.Icon = Properties.Resources.icon;
-
-			var duration = Common.GetCurrentTrackPositionToStr(track.Duration);
-			this._NowPlaying = new MiniForm(this, track.ArtworkUrl, track.Title, track.User.UserName, duration);
-
-			if (os.Version.Major >= 6 && os.Version.Minor >= 2)
-			{
-				this.notifyIcon.BalloonTipTitle = $"Claudia NowPlaying\r\n";
-				this.notifyIcon.BalloonTipText = $"{track.Title}\r\n{track.User.UserName}";
-			}
-			else
-			{
-				this.notifyIcon.BalloonTipTitle = $"Claudia NowPlaying";
-				this.notifyIcon.BalloonTipText = $"{track.Title} - {track.User.UserName}\r\n";
-			}
-
-			this.notifyIcon.ShowBalloonTip(3000);
-		}
-
+		private void _PositionPropertyChanged() =>
+			this.TrackDuration.Text = this._Wmp.controls.currentPositionString;
+		
 		#endregion Private Methods
 	}
 }

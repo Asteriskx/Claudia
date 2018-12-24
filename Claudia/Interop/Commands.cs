@@ -1,4 +1,6 @@
 ﻿using Claudia.SoundCloud.EndPoints;
+using Claudia.SoundCloud.EndPoints.Tracks;
+using Claudia.SoundCloud.EndPoints.Users;
 
 namespace Claudia.Interop
 {
@@ -16,6 +18,11 @@ namespace Claudia.Interop
 		/// 再生機能を提供します。
 		/// </summary>
 		public abstract void Play(SoundCloud.SoundCloud sc, SCFavoriteObjects track);
+
+		/// <summary>
+		/// 再生機能を提供します。
+		/// </summary>
+		public abstract void Play(SoundCloud.SoundCloud sc, Track track);
 
 		/// <summary>
 		/// 一時停止機能を提供します。
