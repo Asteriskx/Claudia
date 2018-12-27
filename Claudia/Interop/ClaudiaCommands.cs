@@ -17,7 +17,6 @@ namespace Claudia.Interop
 		/// </summary>
 		private WindowsMediaPlayer _Wmp { get; set; }
 		private ClaudiaProperties _Properties { get; set; }
-		private ClaudiaObserver _Observer { get; set; }
 
 		#endregion Properties
 
@@ -28,12 +27,10 @@ namespace Claudia.Interop
 		/// </summary>
 		/// <param name="wmp"></param>
 		/// <param name="property"></param>
-		/// <param name="observer"></param>
-		public ClaudiaCommands(WindowsMediaPlayer wmp, ClaudiaProperties property, ClaudiaObserver observer)
+		public ClaudiaCommands(WindowsMediaPlayer wmp, ClaudiaProperties property)
 		{
 			this._Wmp = wmp;
 			this._Properties = property;
-			this._Observer = observer;
 		}
 
 		#endregion Constructor

@@ -22,7 +22,7 @@ namespace Claudia
 	public partial class MainForm : Form
 	{
 		#region Properties
-		
+
 		private WindowsMediaPlayer _Wmp { get; set; } = new WindowsMediaPlayer();
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace Claudia
 		{
 			this._Properties = new ClaudiaProperties(this._Wmp);
 			this._Observer = new ClaudiaObserver(this, this._Wmp);
-			this._Commands = new ClaudiaCommands(this._Wmp, this._Properties, this._Observer);
+			this._Commands = new ClaudiaCommands(this._Wmp, this._Properties);
 
 			this._Observer.PositionPropertyChanged += _PositionPropertyChanged;
 			this._Observer.Initialize();
@@ -148,7 +148,7 @@ namespace Claudia
 		/// </summary>
 		/// <param name="sender"></param>
 		/// <param name="e"></param>
-		private void StreamButton_Click(object sender, EventArgs e) 
+		private void StreamButton_Click(object sender, EventArgs e)
 		{
 			MessageBox.Show("Stream is Coming soon...", "Stream is Unimplemented!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 		}
@@ -219,7 +219,7 @@ namespace Claudia
 								this.SoundCloud.ListTrackIdx = listView.SelectedItems[0].Index;
 								var item = listView.SelectedItems[0];
 								this.SoundCloud.ArtworkUrl = list.value.Tracks[this.SoundCloud.ListTrackIdx].ArtworkUrl;
-								this.SoundCloud.PostData = new Dictionary<string, string> { { item.Text , item.SubItems[1].Text } };
+								this.SoundCloud.PostData = new Dictionary<string, string> { { item.Text, item.SubItems[1].Text } };
 								this._UpdateTrackInfoTest(this.SoundCloud.TabIdx, this.SoundCloud.ListTrackIdx);
 							}
 						};
@@ -359,7 +359,7 @@ namespace Claudia
 			if (this.IsGetLikes)
 				this._UpdateTrackInfo(this.SoundCloud.TrackNum);
 			else if (this.IsGetPlaylists) ;
-				//this._UpdateTrackInfoTest(this.SoundCloud.TrackNum);
+			//this._UpdateTrackInfoTest(this.SoundCloud.TrackNum);
 		}
 
 		/// <summary>
@@ -424,6 +424,8 @@ namespace Claudia
 					};
 
 					this.artPanel.Controls.Add(pictureBox);
+
+					// TODO : ロード進捗率の表示方法 bootstrap とかも組み合わせれれば最高かも。
 					//this.Text = $"Claudia - Loading... {(i + 1 / this.SoundCloud.Likes.Count + 1) / 100}%";
 				}
 			}));
@@ -489,7 +491,7 @@ namespace Claudia
 				this._Commands.Play(this.SoundCloud, track);
 				this.PlayButton.Image = Properties.Resources.pause;
 			}
-			else 
+			else
 			{
 				this.NextAlbumArt.Image = Properties.Resources.none;
 				this.NextTrack.Text = "-";
@@ -506,7 +508,7 @@ namespace Claudia
 		/// </summary>
 		private void _PositionPropertyChanged() =>
 			this.TrackDuration.Text = this._Wmp.controls.currentPositionString;
-		
+
 		#endregion Private Methods
 	}
 }
