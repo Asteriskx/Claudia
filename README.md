@@ -16,7 +16,7 @@ MIT License
   - Windows 10 Home
 
 - IDE  
-  - Visual Studio 2017 Community (C# 7.2, .NET Framework 4.7.2)
+  - Visual Studio 2017 Community (C# 7.3, .NET Framework 4.7.2)
   - SmartGit
   
 ### Claudia で利用しているライブラリとそのライセンス
