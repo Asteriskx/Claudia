@@ -38,6 +38,7 @@
 			this.NextTrack = new System.Windows.Forms.Label();
 			this.NextAlbumArt = new System.Windows.Forms.PictureBox();
 			this.panel3 = new System.Windows.Forms.Panel();
+			this.EndDuration = new System.Windows.Forms.Label();
 			this.VolumeValue = new System.Windows.Forms.Label();
 			this.CurrentPosition = new System.Windows.Forms.TrackBar();
 			this.VolumeBar = new System.Windows.Forms.TrackBar();
@@ -47,6 +48,10 @@
 			this.NextButton = new System.Windows.Forms.Button();
 			this.CurrentTrack = new System.Windows.Forms.Label();
 			this.artPanel = new System.Windows.Forms.FlowLayoutPanel();
+			this.Playlist = new System.Windows.Forms.TabControl();
+			this.tabPage1 = new System.Windows.Forms.TabPage();
+			this.tabPage2 = new System.Windows.Forms.TabPage();
+			this.tabPage3 = new System.Windows.Forms.TabPage();
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.CurrentInfo = new System.Windows.Forms.Label();
 			this.CurrentArtist = new System.Windows.Forms.Label();
@@ -54,22 +59,17 @@
 			this.NextArtist = new System.Windows.Forms.Label();
 			this.CurrentArtwork = new System.Windows.Forms.PictureBox();
 			this.axWmp = new AxWMPLib.AxWindowsMediaPlayer();
-			this.Playlist = new System.Windows.Forms.TabControl();
-			this.tabPage1 = new System.Windows.Forms.TabPage();
-			this.tabPage2 = new System.Windows.Forms.TabPage();
-			this.tabPage3 = new System.Windows.Forms.TabPage();
-			this.EndDuration = new System.Windows.Forms.Label();
 			this.panel2.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.NextAlbumArt)).BeginInit();
 			this.panel3.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.CurrentPosition)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.VolumeBar)).BeginInit();
 			this.artPanel.SuspendLayout();
+			this.Playlist.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.groupBox1.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.CurrentArtwork)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.axWmp)).BeginInit();
-			this.Playlist.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// panel2
@@ -203,6 +203,16 @@
 			this.panel3.Size = new System.Drawing.Size(1347, 48);
 			this.panel3.TabIndex = 5;
 			// 
+			// EndDuration
+			// 
+			this.EndDuration.AutoSize = true;
+			this.EndDuration.ForeColor = System.Drawing.Color.White;
+			this.EndDuration.Location = new System.Drawing.Point(1022, 17);
+			this.EndDuration.Name = "EndDuration";
+			this.EndDuration.Size = new System.Drawing.Size(33, 18);
+			this.EndDuration.TabIndex = 23;
+			this.EndDuration.Text = "--:--";
+			// 
 			// VolumeValue
 			// 
 			this.VolumeValue.AutoSize = true;
@@ -307,12 +317,55 @@
 			this.artPanel.Size = new System.Drawing.Size(1297, 589);
 			this.artPanel.TabIndex = 7;
 			// 
+			// Playlist
+			// 
+			this.Playlist.Controls.Add(this.tabPage1);
+			this.Playlist.Controls.Add(this.tabPage2);
+			this.Playlist.Controls.Add(this.tabPage3);
+			this.Playlist.Location = new System.Drawing.Point(3, 3);
+			this.Playlist.Name = "Playlist";
+			this.Playlist.SelectedIndex = 0;
+			this.Playlist.Size = new System.Drawing.Size(1294, 586);
+			this.Playlist.TabIndex = 0;
+			this.Playlist.Visible = false;
+			// 
+			// tabPage1
+			// 
+			this.tabPage1.Location = new System.Drawing.Point(4, 22);
+			this.tabPage1.Name = "tabPage1";
+			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage1.Size = new System.Drawing.Size(1286, 560);
+			this.tabPage1.TabIndex = 0;
+			this.tabPage1.Text = "tabPage1";
+			this.tabPage1.UseVisualStyleBackColor = true;
+			// 
+			// tabPage2
+			// 
+			this.tabPage2.Location = new System.Drawing.Point(4, 22);
+			this.tabPage2.Name = "tabPage2";
+			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage2.Size = new System.Drawing.Size(1286, 560);
+			this.tabPage2.TabIndex = 1;
+			this.tabPage2.Text = "tabPage2";
+			this.tabPage2.UseVisualStyleBackColor = true;
+			// 
+			// tabPage3
+			// 
+			this.tabPage3.Location = new System.Drawing.Point(4, 22);
+			this.tabPage3.Name = "tabPage3";
+			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+			this.tabPage3.Size = new System.Drawing.Size(1286, 560);
+			this.tabPage3.TabIndex = 2;
+			this.tabPage3.Text = "tabPage3";
+			this.tabPage3.UseVisualStyleBackColor = true;
+			// 
 			// panel1
 			// 
 			this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(48)))), ((int)(((byte)(48)))));
 			this.panel1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+			this.panel1.Controls.Add(this.axWmp);
 			this.panel1.Controls.Add(this.CurrentInfo);
 			this.panel1.Controls.Add(this.CurrentArtist);
 			this.panel1.Controls.Add(this.groupBox1);
@@ -392,64 +445,12 @@
 			// axWmp
 			// 
 			this.axWmp.Enabled = true;
-			this.axWmp.Location = new System.Drawing.Point(1140, 12);
+			this.axWmp.Location = new System.Drawing.Point(740, 84);
 			this.axWmp.Name = "axWmp";
 			this.axWmp.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axWmp.OcxState")));
-			this.axWmp.Size = new System.Drawing.Size(125, 46);
+			this.axWmp.Size = new System.Drawing.Size(226, 34);
 			this.axWmp.TabIndex = 7;
 			this.axWmp.Visible = false;
-			// 
-			// Playlist
-			// 
-			this.Playlist.Controls.Add(this.tabPage1);
-			this.Playlist.Controls.Add(this.tabPage2);
-			this.Playlist.Controls.Add(this.tabPage3);
-			this.Playlist.Location = new System.Drawing.Point(3, 3);
-			this.Playlist.Name = "Playlist";
-			this.Playlist.SelectedIndex = 0;
-			this.Playlist.Size = new System.Drawing.Size(1294, 586);
-			this.Playlist.TabIndex = 0;
-			this.Playlist.Visible = false;
-			// 
-			// tabPage1
-			// 
-			this.tabPage1.Location = new System.Drawing.Point(4, 22);
-			this.tabPage1.Name = "tabPage1";
-			this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage1.Size = new System.Drawing.Size(1286, 560);
-			this.tabPage1.TabIndex = 0;
-			this.tabPage1.Text = "tabPage1";
-			this.tabPage1.UseVisualStyleBackColor = true;
-			// 
-			// tabPage2
-			// 
-			this.tabPage2.Location = new System.Drawing.Point(4, 22);
-			this.tabPage2.Name = "tabPage2";
-			this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage2.Size = new System.Drawing.Size(1286, 560);
-			this.tabPage2.TabIndex = 1;
-			this.tabPage2.Text = "tabPage2";
-			this.tabPage2.UseVisualStyleBackColor = true;
-			// 
-			// tabPage3
-			// 
-			this.tabPage3.Location = new System.Drawing.Point(4, 22);
-			this.tabPage3.Name = "tabPage3";
-			this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-			this.tabPage3.Size = new System.Drawing.Size(1286, 560);
-			this.tabPage3.TabIndex = 2;
-			this.tabPage3.Text = "tabPage3";
-			this.tabPage3.UseVisualStyleBackColor = true;
-			// 
-			// EndDuration
-			// 
-			this.EndDuration.AutoSize = true;
-			this.EndDuration.ForeColor = System.Drawing.Color.White;
-			this.EndDuration.Location = new System.Drawing.Point(1022, 17);
-			this.EndDuration.Name = "EndDuration";
-			this.EndDuration.Size = new System.Drawing.Size(33, 18);
-			this.EndDuration.TabIndex = 23;
-			this.EndDuration.Text = "--:--";
 			// 
 			// MainForm
 			// 
@@ -458,7 +459,6 @@
 			this.AutoSize = true;
 			this.ClientSize = new System.Drawing.Size(1347, 763);
 			this.Controls.Add(this.panel1);
-			this.Controls.Add(this.axWmp);
 			this.Controls.Add(this.artPanel);
 			this.Controls.Add(this.panel3);
 			this.Controls.Add(this.panel2);
@@ -476,13 +476,13 @@
 			((System.ComponentModel.ISupportInitialize)(this.CurrentPosition)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.VolumeBar)).EndInit();
 			this.artPanel.ResumeLayout(false);
+			this.Playlist.ResumeLayout(false);
 			this.panel1.ResumeLayout(false);
 			this.panel1.PerformLayout();
 			this.groupBox1.ResumeLayout(false);
 			this.groupBox1.PerformLayout();
 			((System.ComponentModel.ISupportInitialize)(this.CurrentArtwork)).EndInit();
 			((System.ComponentModel.ISupportInitialize)(this.axWmp)).EndInit();
-			this.Playlist.ResumeLayout(false);
 			this.ResumeLayout(false);
 
 		}

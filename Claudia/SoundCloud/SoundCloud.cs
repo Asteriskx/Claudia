@@ -2,7 +2,6 @@
 using Claudia.SoundCloud.EndPoints;
 using Claudia.SoundCloud.EndPoints.Users;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;

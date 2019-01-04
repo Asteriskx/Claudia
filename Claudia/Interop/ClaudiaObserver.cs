@@ -74,7 +74,7 @@ namespace Claudia.Interop
 			this.LikesCurrentTrackChanged += _CurrentTrackChanged;
 			this.PlayListCurrentTrackChanged += _CurrentTrackChanged;
 
-			this._UpdateTimer.Elapsed += (o, e) =>
+			this._UpdateTimer.Elapsed += (s, ev) =>
 			{
 				this._Parent.Invoke((MethodInvoker)(() =>
 				{
@@ -167,10 +167,10 @@ namespace Claudia.Interop
 		/// <param name="track"></param>
 		private void _CurrentTrackChanged<T>(T track)
 		{
-			if (track is SCFavoriteObjects)
-				new NotifyMessage<SCFavoriteObjects>((SCFavoriteObjects)(object)track);
-			else if (track is Track)
-				new NotifyMessage<Track>((Track)(object)track);
+			if (track is SCFavoriteObjects fav)
+				new NotifyMessage<SCFavoriteObjects>(fav);
+			else if (track is Track t)
+				new NotifyMessage<Track>(t);
 		}
 
 		#endregion Public Methods

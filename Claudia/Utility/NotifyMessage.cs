@@ -22,23 +22,21 @@ namespace Claudia.Utility
 			using (var notifyIcon = new NotifyIcon { Visible = true, Icon = Properties.Resources.icon })
 			{
 				var os = Environment.OSVersion;
-				if (track is SCFavoriteObjects)
+				if (track is SCFavoriteObjects fav)
 				{
-					var t = (SCFavoriteObjects)(object)track;
 					if (os.Version.Major >= 6 && os.Version.Minor >= 2)
 					{
 						notifyIcon.BalloonTipTitle = $"Claudia NowPlaying\r\n";
-						notifyIcon.BalloonTipText = $"{t.Title}\r\n{t.User.UserName}";
+						notifyIcon.BalloonTipText = $"{fav.Title}\r\n{fav.User.UserName}";
 					}
 					else
 					{
 						notifyIcon.BalloonTipTitle = $"Claudia NowPlaying";
-						notifyIcon.BalloonTipText = $"{t.Title} - {t.User.UserName}\r\n";
+						notifyIcon.BalloonTipText = $"{fav.Title} - {fav.User.UserName}\r\n";
 					}
 				}
-				else if (track is Track)
+				else if (track is Track t)
 				{
-					var t = (Track)(object)track;
 					if (os.Version.Major >= 6 && os.Version.Minor >= 2)
 					{
 						notifyIcon.BalloonTipTitle = $"Claudia NowPlaying\r\n";

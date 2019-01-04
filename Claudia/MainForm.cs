@@ -217,8 +217,8 @@ namespace Claudia
 							{
 								this.SoundCloud.TabIdx = Playlist.SelectedIndex;
 								this.SoundCloud.ListTrackIdx = listView.SelectedItems[0].Index;
-								var item = listView.SelectedItems[0];
 								this.SoundCloud.ArtworkUrl = list.value.Tracks[this.SoundCloud.ListTrackIdx].ArtworkUrl;
+								var item = listView.SelectedItems[0];
 								this.SoundCloud.PostData = new Dictionary<string, string> { { item.Text, item.SubItems[1].Text } };
 								this._UpdateTrackInfoTest(this.SoundCloud.TabIdx, this.SoundCloud.ListTrackIdx);
 							}
