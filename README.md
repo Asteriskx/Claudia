@@ -2,11 +2,14 @@
 # Claudia
 Claudia is SoundCloud Wrapper Application. (for me.)
 
-- Main Form  
+- Main Form (Likes)  
 ![sample-wip](sample-wip.png)
 
-- Mini Form (Now Playing)  
+- Main Form (Playlists)  
 ![sample-wip2](sample-wip2.png)
+
+- Mini Form (Now Playing)  
+![sample-wip3](sample-wip3.png)
 
 ## License for Claudia
 MIT License
